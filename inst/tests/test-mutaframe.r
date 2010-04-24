@@ -29,3 +29,15 @@ test_that("shorter columns recycled", {
 test_that("failure to recycle raises error", {
   expect_that(pframe(a = 1:10, b = 1:9), throws_error("different row counts"))
 })
+
+test_that("default names behave like data.frame", {
+  a <- pframe(1, 2)
+  expect_that(names(a), equals(c("X1", "X2")))
+  
+  b <- pframe(1, X1 = 2)
+  expect_that(names(b), equals(c("X1", "X1.1")))
+
+  c <- pframe(`a b` = 1)
+  expect_that(names(c), equals("a.b"))
+  
+})

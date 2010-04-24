@@ -14,3 +14,12 @@ dimnames.pframe <- function(x, ...) {
   attr(x, "col.names") <- value[[2]]
   x
 }
+
+
+#' Make valid variable names
+variable_names <- function(var_names) {
+  no_name <- is.na(var_names) | nzchar(var_names) == 0
+  var_names[no_name] <- paste("X", seq_len(sum(no_name)), sep = "")
+
+  make.names(var_names, unique = T)
+}

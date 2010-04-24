@@ -6,20 +6,8 @@ pframe <- function(..., row.names = NULL) {
   if (length(listData) == 0) return(.pframe())
 
   # Work out names
-  dotnames <- names(listData)
-  dotvalues <- 
-    sapply(as.list(substitute(list(...)))[-1L],
-           function(arg) deparse(arg)[1L])
-  if (is.null(dotnames)) {
-    emptynames <- rep.int(TRUE, length(listData))
-    names(listData) <- dotvalues
-  } else {
-    emptynames <- !nzchar(dotnames)
-    if (any(emptynames)) {
-      names(listData)[emptynames] <- dotvalues[emptynames]
-    }
-  }
-
+  names(listData) <- variable_names(names(listData) %||% 
+    rep(NA_character_, length(listData)))
   
   varnames <- as.list(names(listData))
   varlist <- vector("list", length(listData))
