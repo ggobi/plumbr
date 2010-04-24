@@ -1,5 +1,3 @@
-
-
 ## constructor
 pframe <- function(...) {
   listData <- list(...)
