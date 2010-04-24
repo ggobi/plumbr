@@ -1,12 +1,9 @@
 ## constructor
-pframe <- function(...) {
+pframe <- function(..., row.names = NULL) {
   listData <- list(...)
 
   # If no data, return NULL pframe
   if (length(listData) == 0) return(.pframe())
-
-  nr <- 0
-  varlist <- vector("list", length(listData))
 
   # Work out names
   dotnames <- names(listData)
@@ -22,7 +19,10 @@ pframe <- function(...) {
       names(listData)[emptynames] <- dotvalues[emptynames]
     }
   }
+
+  
   varnames <- as.list(names(listData))
+  varlist <- vector("list", length(listData))
   nrows <- ncols <- integer(length(varnames))
   for (i in seq_along(listData)) {
     element <- try(as.pframe(listData[[i]]), silent = TRUE)
@@ -63,17 +63,17 @@ pframe <- function(...) {
   names(varlist) <- make.names(unlist(varnames[ncols > 0L]), unique = TRUE)
   
   if (!is.null(row.names)) {
-    if (anyMissing(row.names))
+    if (any(is.na(row.names)))
       stop("missing values in 'row.names'")
     if (length(varlist) && length(row.names) != nr)
       stop("invalid length of row names")
-    if (anyDuplicated(row.names))
+    if (any(duplicated(row.names)))
       stop("duplicate row names")
     row.names <- as.character(row.names)
   } else row.names <- as.character(seq(max(nr)))
 
   env <- .pframe(varlist, row.names)
-  provenance(env) <- sys.call()
+  # provenance(env) <- sys.call()
   env
 }
 
