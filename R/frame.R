@@ -69,65 +69,67 @@
 
 ## constructor
 pframe <- function(...) {
-  nr <- 0
   listData <- list(...)
+
+  # If no data, return NULL pframe
+  if (length(listData) == 0) return(.pframe())
+
+  nr <- 0
   varlist <- vector("list", length(listData))
-  
-  if (length(listData) == 0) return(.pframe(NULL, ""))
-  if (length(listData) > 0) {
-    dotnames <- names(listData)
-    dotvalues <- 
-      sapply(as.list(substitute(list(...)))[-1L],
-             function(arg) deparse(arg)[1L])
-    if (is.null(dotnames)) {
-      emptynames <- rep.int(TRUE, length(listData))
-      names(listData) <- dotvalues
-    } else {
-      emptynames <- !nzchar(dotnames)
-      if (any(emptynames)) {
-        names(listData)[emptynames] <- dotvalues[emptynames]
-      }
+
+  # Work out names
+  dotnames <- names(listData)
+  dotvalues <- 
+    sapply(as.list(substitute(list(...)))[-1L],
+           function(arg) deparse(arg)[1L])
+  if (is.null(dotnames)) {
+    emptynames <- rep.int(TRUE, length(listData))
+    names(listData) <- dotvalues
+  } else {
+    emptynames <- !nzchar(dotnames)
+    if (any(emptynames)) {
+      names(listData)[emptynames] <- dotvalues[emptynames]
     }
-    varnames <- as.list(names(listData))
-    nrows <- ncols <- integer(length(varnames))
-    for (i in seq_along(listData)) {
-      element <- try(as.pframe(listData[[i]]), silent = TRUE)
-      if (inherits(element, "try-error"))
-        stop("cannot coerce class \"", class(listData[[i]]),
-             "\" to a DataFrame")
-      nrows[i] <- nrow(element)
-      ncols[i] <- ncol(element)
-      varlist[[i]] <-
-        if (is.environment(listData[[i]]))
-          .proxyVars(element, names(element))
-        else as.list(element)
-      if ((length(dim(listData[[i]])) > 1) ||
-          (ncol(element) > 1)) {
-        if (emptynames[i])
-          varnames[[i]] <- colnames(element)
-        else
-          varnames[[i]] <- paste(varnames[[i]], colnames(element), sep = ".")
-      }
-    }
-    nr <- max(nrows)
-    for (i in which((nrows > 0L) & (nrows < nr) & (nr %% nrows == 0L))) {
-      recycle <- rep(seq_len(nrows[i]), length.out = nr)
-      varlist[[i]] <- lapply(varlist[[i]], function(sym) {
-        if (is.function(x))
-          function(v) {
-            if (!missing(v))
-              .irreversible("replication")
-            x()[recycle, drop=FALSE]
-          }
-        else x[recycle, drop=FALSE]
-      })
-      nrows[i] <- nr
-    }
-    if (!all(nrows == nr))
-      stop("different row counts implied by arguments")
-    varlist <- unlist(varlist, recursive = FALSE, use.names = FALSE)
-    names(varlist) <- make.names(unlist(varnames[ncols > 0L]), unique = TRUE)
   }
+  varnames <- as.list(names(listData))
+  nrows <- ncols <- integer(length(varnames))
+  for (i in seq_along(listData)) {
+    element <- try(as.pframe(listData[[i]]), silent = TRUE)
+    if (inherits(element, "try-error"))
+      stop("cannot coerce class \"", class(listData[[i]]),
+           "\" to a DataFrame")
+    nrows[i] <- nrow(element)
+    ncols[i] <- ncol(element)
+    varlist[[i]] <-
+      if (is.environment(listData[[i]]))
+        .proxyVars(element, names(element))
+      else as.list(element)
+    if ((length(dim(listData[[i]])) > 1) ||
+        (ncol(element) > 1)) {
+      if (emptynames[i])
+        varnames[[i]] <- colnames(element)
+      else
+        varnames[[i]] <- paste(varnames[[i]], colnames(element), sep = ".")
+    }
+  }
+  nr <- max(nrows)
+  for (i in which((nrows > 0L) & (nrows < nr) & (nr %% nrows == 0L))) {
+    recycle <- rep(seq_len(nrows[i]), length.out = nr)
+    varlist[[i]] <- lapply(varlist[[i]], function(sym) {
+      if (is.function(x))
+        function(v) {
+          if (!missing(v))
+            .irreversible("replication")
+          x()[recycle, drop=FALSE]
+        }
+      else x[recycle, drop=FALSE]
+    })
+    nrows[i] <- nr
+  }
+  if (!all(nrows == nr))
+    stop("different row counts implied by arguments")
+  varlist <- unlist(varlist, recursive = FALSE, use.names = FALSE)
+  names(varlist) <- make.names(unlist(varnames[ncols > 0L]), unique = TRUE)
   
   if (!is.null(row.names)) {
     if (anyMissing(row.names))
@@ -144,7 +146,7 @@ pframe <- function(...) {
   env
 }
 
-.pframe <- function(varlist, row.names) {
+.pframe <- function(varlist = list(), row.names = NULL) {
   env <- new.env()
   class(env) <- c("pframe", class(env))
   mapply(function(name, value) {
@@ -491,6 +493,13 @@ as.data.frame.pframe <- function(x, row.names=NULL, optional=FALSE, ...) {
 }
 
 ## utils
+
+nrow.pframe <- function(x) length(attr(x, "row.names")) %||% 0
+
+ncol.pframe <- function(x) length(attr(x, "col.names")) %||% 0
+dim.pframe <- function(x) c(nrow.pframe(x), ncol.pframe(x))
+
+"%||%" <- function(a, b) if(is.null(a)) b else a
 
 .irreversible <- function(reason)
   stop("Reversal impossible due to ", reason, ".")
