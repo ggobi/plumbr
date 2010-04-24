@@ -1,0 +1,67 @@
+Ideas for mutable, dynamic frames
+
+Mutability achieved by storing columns in environments
+Dynamic frames achieved through active bindings in environment
+
+All sorts of cool things can be built on this, like proxies.
+
+Methods:
+
+Extraction: [[, [, $
+Sub-assignment: [[<-, $<-, [<-
+Combination: cbind, rbind
+Accessors: dimnames, dim
+Subset: subset, head, tail, na.*
+Aggregation: aggregate, xtabs
+Transform: transform
+Apply: by, lapply
+Split: split
+Coercion: as.data.frame
+Summary: summary
+Duplicates: duplicated, anyDuplicated
+Display: print
+
+The methods that would return another frame could return a proxy,
+or a rooted frame. The methods [, c/rbind, subsetting, aggregate,
+and split fall into this category. Particularly with subsetting
+methods, one may want to delete the original frame, rather than
+proxy it. Passing 'drop = TRUE' to [, for example, could root the
+frame. We can add the 'drop' argument on to our other methods, like
+subset.data.frame does. There can be a function could be used to
+explictly root a proxy.
+
+For the subassign functions, we cannot create a new proxy, for
+reasons inherent in the language. But how do we decide if the
+modification happens at the proxy or the root? This is like <-
+vs. <<-. Given the mutable nature of the design, we should probably
+take the <<- route. Follow the parent links until the definition is
+found, and replace it. This requires a reverse pipeline.
+Transformations need to reverse transform (if possible) any
+assignment. We should probably just throw an error when reversal is
+impossible.
+
+Being an environment gives us with(), modeling functions, etc, for free
+
+The model could record the call that constructed it, which would
+allow displaying the workflow or "pipeline" behind it
+
+Would also be nice if something provided a Qt data model on top of it
+
+The next step is to figure out change notification. Handlers need
+to be registered, with two arguments, i and j, that index into the
+rows and columns, respectively. Any replacement function will
+necessarily modify the frame in-place, and the change event will be
+emitted. Parameters of dynamic columns can of course be changed
+through the use of closures, but the frame must be explicitly
+informed of the change.
+
+Every binding will need to be active, so that when a change is
+made, an event is reported. Event reporting will need to be frozen
+when many changes are about to be made. When frozen, the events are
+aggregated. When the thaw method is called, the aggegated event is
+dispatched. Each frame will need to listen to each of its
+parents/components and forward the events. Some stages may need to
+add more changes. For example, a subset() stage will check if its
+subsetting has changed and, if so, add all columns to the event. A
+transform() frame would report changes to any transformed columns,
+if not already marked.
