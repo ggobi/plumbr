@@ -46,7 +46,7 @@ pframe <- function(..., row.names = NULL) {
   nr <- max(nrows)
   for (i in which((nrows > 0L) & (nrows < nr) & (nr %% nrows == 0L))) {
     recycle <- rep(seq_len(nrows[i]), length.out = nr)
-    varlist[[i]] <- lapply(varlist[[i]], function(sym) {
+    varlist[[i]] <- lapply(varlist[[i]], function(x) {
       if (is.function(x))
         function(v) {
           if (!missing(v))
