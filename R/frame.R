@@ -79,8 +79,11 @@ pframe <- function(...) {
   env
 }
 
+#' Raw constructor.
+#' Constructs a pframe without checking that variables are of the correct
+#' type and length.
 .pframe <- function(varlist = list(), row.names = NULL) {
-  env <- new.env()
+  env <- new.env(parent = emptyenv())
   class(env) <- c("pframe", class(env))
   mapply(function(name, value) {
     if (is.function(value))
