@@ -72,6 +72,8 @@ pframe <- function(...) {
   nr <- 0
   listData <- list(...)
   varlist <- vector("list", length(listData))
+  
+  if (length(listData) == 0) return(.pframe(NULL, ""))
   if (length(listData) > 0) {
     dotnames <- names(listData)
     dotvalues <- 
@@ -151,8 +153,8 @@ pframe <- function(...) {
     else assign(name, value, env)
   }, names(varlist), varlist)
   ## we have the names in the 'env', but this keeps their order
-  colnames(env) <- names(varlist)
-  rownames(env) <- row.names
+  attr(env, "col.names") <- names(varlist)
+  attr(env, "row.names") <- row.names
   env
 }
 
