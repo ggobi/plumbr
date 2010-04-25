@@ -1,5 +1,7 @@
 ## extraction
 
+# Any operation that would return a 
+
 "$.pframe" <- function(x, name) {
   x[[name, exact=FALSE]]
 }
@@ -111,25 +113,24 @@
     rn <- rn[i]
     if (anyDuplicated(rn))
       rn <- make.unique(rn)
-  } else i <- NULL
+  } else {
+    i <- TRUE
+  }
 
-  varlist <- .proxyVars(x, j, i)
-  if (anyDuplicated(names(varlist)))
-    names(varlist) <- make.unique(names(varlist))
-  x <- .pframe(varlist, rn)
   
   if (missing(drop)) ## drop by default if only one column left
-    drop <- dim[2L] == 1
-  if (drop) {
-    ## one column left
-    if (dim[2L] == 1) 
-      return(x[[1L]])
-    ## one row left
-    if (dim[1L] == 1)
-      return(as(x, "list"))
+    drop <- length(dim[2L]) == 1
+    
+  if (dim[2L] == 1 && drop) {
+    # Single column output, and want to drop, so return static clone
+    x[[j]][i]
+  } else {
+    # Otherwise return proxy
+    varlist <- .proxyVars(x, j, i)
+    if (anyDuplicated(names(varlist)))
+      names(varlist) <- make.unique(names(varlist))
+    .pframe(varlist, rn)
   }
-  
-  x
 }
 
 ### TODO: emit events
