@@ -33,8 +33,9 @@
   if (is.null(value)) {
     rm(list = name, envir = x)
     names(x) <- setdiff(names(x), name)
+    notify_listeners(x, NULL, NULL)
   } else {
-    x[[name]] <- value    
+    x[[name]] <- value
   }
   x
 }
@@ -142,20 +143,20 @@
       jInfo <-
         list(msg = NULL, useIdx = FALSE, idx = seq_len(ncol(x)))
     } else {
-      jInfo <- .bracket.Index(i, ncol(x), colnames(x))
+      jInfo <- .bracket.Index(i, ncol(x), colnames(x), new.nms = TRUE)
     }
   } else {
     if (missing(i)) {
       iInfo <- list(msg = NULL, useIdx = FALSE, idx = NULL)
     } else {
-      iInfo <-
-        .bracket.Index(i, nrow(x), rownames(x), allowNumeric=TRUE)
+      iInfo <- .bracket.Index(i, nrow(x), rownames(x), allowNumeric=TRUE,
+        new.nms = TRUE)
     }
     if (missing(j)) {
       jInfo <-
         list(msg = NULL, useIdx = FALSE, idx = seq_len(ncol(x)))
     } else {
-      jInfo <- .bracket.Index(j, ncol(x), colnames(x))
+      jInfo <- .bracket.Index(j, ncol(x), colnames(x), new.nms = TRUE)
     }
   }
   if (!is.null(iInfo[["msg"]]))
@@ -164,60 +165,44 @@
     stop("replacing cols: ", jInfo[["msg"]])
   i <- iInfo[["idx"]]
   j <- jInfo[["idx"]]
-  useI <- iInfo[["useIdx"]]
-  if (!is(value, "mutaframe")) {
-    if (useI)
-      li <- length(i)
-    else
-      li <- nrow(x)
+
+  useI <- iInfo[["useIdx"]]  
+  if (useI) {
+    li <- length(i)
+  } else {
+    li <- nrow(x)
+  }
+
+  if (NCOL(value) == 1) {
     lv <- length(value)
     if (li != lv) {
       if ((li == 0) || (li %% lv != 0))
-        stop(paste(lv, "rows in value to replace",
-                   li, "rows"))
+        stop(paste(lv, "rows in value to replace", li, "rows"))
       else
         value <- rep(value, length.out = li)
-    }
-    if (useI) {
-      vals <- mget(j, x)
-      for (ji in j) {
-        y <- vals[[ji]]
-        y[i] <- value
-        assign(ji, y, x)
-      }
-    } else {
-      for (ji in j)
-        assign(ji, value, x)
     }
   } else {
     if (ncol(value) != length(j))
       stop("ncol(x[j]) != ncol(value)")
-    if (useI)
-      li <- length(i)
-    else
-      li <- nrow(x)
     nrv <- nrow(value)
     if (li != nrv) {
       if ((li == 0) || (li %% nrv != 0))
-        stop(paste(nrv, "rows in value to replace",
-                   li, "rows"))
+        stop(paste(nrv, "rows in value to replace", li, "rows"))
       else
-        value <-
-          value[rep(seq_len(nrv), length.out = li), ,
-                drop=FALSE]
-    }
-    if (useI) {
-      vals <- mget(j, x)      
-      for (ji in j) {
-        y <- vals[[ji]]
-        y[i] <- value[[ji]]
-        assign(ji, y, x)
-      }
-    } else {
-      for (ji in j)
-        assign(ji, value[[ji]], x)
+        value <- value[rep(seq_len(nrv), length.out = li), , drop = FALSE]
     }
   }
+  
+  if (useI) {
+    for (ji in j) {
+      x[[ji]][i] <- value
+    }
+  } else {
+    for (ji in j) {
+      x[[ji]] <- value
+    }
+  }
+  
   x
 }
 
@@ -228,7 +213,7 @@ anyMissingOrOutside <- function(x, lower = -.Machine$integer.max,
 }
 
 .bracket.Index <-
-  function(idx, lx, nms = NULL, dup.nms = FALSE, allowNumeric = FALSE)
+  function(idx, lx, nms = NULL, dup.nms = FALSE, new.nms = FALSE, allowNumeric = FALSE)
 {
   msg <- NULL
   if (is.numeric(idx)) {
@@ -257,7 +242,7 @@ anyMissingOrOutside <- function(x, lower = -.Machine$integer.max,
         m <- pmatch(idx, nms, duplicates.ok = TRUE)
       else
         m <- match(idx, nms)
-      if (!dup.nms && any(is.na(m)))
+      if (!new.nms && !dup.nms && any(is.na(m)))
         msg <- "mismatching names"
     }
   } else if (!is.null(idx)) {
