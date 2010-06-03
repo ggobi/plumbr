@@ -29,9 +29,9 @@ filter_bindings <- function(mf, j = names(mf), i) {
     function(v) {
       if (is.character(i))
         i <- pmatch(i, rownames(mf), duplicates.ok = TRUE)
-      xval <- get(sym, mf)[i]
+      xval <- get(sym, mf)
       if (missing(v))
-        xval
+        xval[i]
       else {
         xval[i] <- v
         assign(sym, xval, mf)
@@ -48,12 +48,13 @@ filter_bindings <- function(mf, j = names(mf), i) {
 #' @returns named list of binding functions
 raw_bindings <- function(mf, data) {
   binder <- function(sym) {
-    function(v) {
-      if (missing(v)) {
-        data[[sym]]
+    function(new) {
+      old <- data[[sym]]
+      if (missing(new)) {
+        old
       } else {
-        notify_listeners(mf, which(data[[sym]] != v), sym)
-        data[[sym]] <<- v
+        notify_listeners(mf, which(old != new), sym)
+        data[[sym]] <<- new
       }      
     }
   }
