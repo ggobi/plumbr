@@ -30,7 +30,12 @@
 }
 
 "$<-.mutaframe" <- function(x, name, value) {
-  x[[name]] <- value
+  if (is.null(value)) {
+    rm(list = name, envir = x)
+    names(x) <- setdiff(names(x), name)
+  } else {
+    x[[name]] <- value    
+  }
   x
 }
 
