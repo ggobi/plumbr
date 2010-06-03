@@ -85,7 +85,7 @@
     if (!is.null(iInfo[["msg"]]))
       stop("subsetting as list: ", iInfo[["msg"]])
     
-    filter_proxy(x, j = iInfo[["idx"]], rn = rownames(x))
+    return(filter_proxy(x, j = iInfo[["idx"]], rn = rownames(x)))
   }
 
 ### NOTE: the indexing into columns is static, so negative column
@@ -240,12 +240,12 @@ anyMissingOrOutside <- function(x, lower = -.Machine$integer.max,
         msg <- "negative and positive indices cannot be mixed"
     }
   } else if (is.logical(idx)) {
-    if (anyMissing(idx))
+    if (any(is.na(idx)))
       msg <- "subscript contains NAs"
     else if (length(idx) > lx)
       msg <- "subscript out of bounds"
   } else if (is.character(idx) || is.factor(idx)) {
-    if (anyMissing(idx))
+    if (any(is.na(idx)))
       msg <- "subscript contains NAs"
     else if (is.null(nms) && length(idx) > 0)
       msg <- "cannot subset by character when names are NULL"
@@ -254,7 +254,7 @@ anyMissingOrOutside <- function(x, lower = -.Machine$integer.max,
         m <- pmatch(idx, nms, duplicates.ok = TRUE)
       else
         m <- match(idx, nms)
-      if (!dup.nms && anyMissing(m))
+      if (!dup.nms && any(is.na(m)))
         msg <- "mismatching names"
     }
   } else if (!is.null(idx)) {
