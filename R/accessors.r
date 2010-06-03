@@ -31,6 +31,7 @@
 
 "$<-.mutaframe" <- function(x, name, value) {
   if (is.null(value)) {
+    # Remove column
     rm(list = name, envir = x)
     names(x) <- setdiff(names(x), name)
     notify_listeners(x, NULL, NULL)
@@ -65,11 +66,13 @@
       i <- paste("V", i, sep = "")
     else i <- names(x)[i]
   }
+  
   if (!exists(i, x)) {
-    ## ensure unique, valid names    
-    nms <- make.names(c(names(x), i), unique=TRUE)
+    # Add new column
+    nms <- make.names(c(names(x), i), unique = TRUE)
     names(x) <- nms
     i <- tail(nms, 1L)
+    notify_listeners(x, NULL, NULL)
   }
   assign(i, value, x)
   x
