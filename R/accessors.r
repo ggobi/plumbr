@@ -34,7 +34,6 @@
   x
 }
 
-### TODO: emit events
 "[[<-.mutaframe" <- function(x, i, j,..., value) {
   nrx <- nrow(x)
   lv <- length(value)
@@ -128,7 +127,6 @@
   }
 }
 
-### TODO: emit events
 "[<-.mutaframe" <- function(x, i, j, ..., value) {  
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")

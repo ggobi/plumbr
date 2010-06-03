@@ -43,3 +43,21 @@ test_that("callback on proxied mutaframe returns correct indices", {
   expect_that(event_a$i, equals(5))
   expect_that(event_b$i, equals(1))
 })
+
+test_that("pausing combines data events", {
+  a <- mutaframe(a = 1:10)
+  event <- NULL
+  add_listener(a, function(i, j) {
+    event <<- list(i = i, j = j)
+  })
+
+  pause(a)
+  a[1, 1] <- 2
+  a[1, 1] <- 3
+  
+  expect_that(event, equals(NULL))
+  unpause(a)
+  expect_that(event, equals(list(i = 1, j = "a")))
+
+  
+})
