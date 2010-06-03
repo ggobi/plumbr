@@ -8,7 +8,7 @@
 #'
 #' @param x mutaframe to inherit from
 #' @param j columns to generate bindings for
-.proxyBinding <- function(mf, j = names(mf)) {
+proxy_bindings <- function(mf, j = names(mf)) {
   binder <- function(sym) {
     function(v) {
       if (missing(v)) {
@@ -25,7 +25,7 @@
 
 #' @param i rows to filter
 #' @returns named list of binding functions
-.filterBinding <- function(mf, j = names(mf), i) {
+filter_bindings <- function(mf, j = names(mf), i) {
   binder <- function(sym) {
     function(v) {
       if (is.character(i))
@@ -48,7 +48,7 @@
 #' 
 #' @param data list of values
 #' @returns named list of binding functions
-.rawBinding <- function(mf, data) {
+raw_bindings <- function(mf, data) {
   binder <- function(sym) {
     function(v) {
       if (missing(v)) {

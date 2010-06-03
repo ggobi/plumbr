@@ -21,7 +21,7 @@ mutaframe <- function(..., row.names = NULL) {
     ncols[i] <- ncol(element)
     varlist[[i]] <-
       if (is.environment(listData[[i]]))
-        .proxyBinding(element, names(element))
+        proxy_bindings(element, names(element))
       else as.list(element)
     if ((length(dim(listData[[i]])) > 1) ||
         (ncol(element) > 1)) {
@@ -75,7 +75,7 @@ mutaframe <- function(..., row.names = NULL) {
   # Ensure all atomic vectors converted to binding functions
   binders <- as.list(varlist)
   fun <- sapply(varlist, is.function)
-  binders[!fun] <- .rawBinding(mf, binders[!fun])
+  binders[!fun] <- raw_bindings(mf, binders[!fun])
   
   # Activate bindings
   for(name in names(binders)) {
