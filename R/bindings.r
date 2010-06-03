@@ -14,7 +14,6 @@ proxy_bindings <- function(mf, j = names(mf)) {
       if (missing(v)) {
         get(sym, mf)
       } else {
-        notify_listeners(mf, which[v != get(sym, mf)], sym)
         assign(sym, v, mf)
       } 
     }
@@ -34,7 +33,6 @@ filter_bindings <- function(mf, j = names(mf), i) {
       if (missing(v))
         xval
       else {
-        notify_listeners(mf, i[xval != v], sym)
         xval[i] <- v
         assign(sym, xval, mf)
       }
