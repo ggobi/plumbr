@@ -15,3 +15,11 @@ combine_data_events <- function(events) {
   
   do.call("rbind", events)
 }
+
+add_listener <- function(mf, callback) {
+  attr(mf, "listeners") <- append(listeners(mf), callback)
+}
+
+listeners <- function(mf) {
+  attr(mf, "listeners")
+}

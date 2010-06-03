@@ -80,6 +80,7 @@ mutaframe <- function(..., row.names = NULL) {
   ## we have the names in the 'env', but this keeps their order
   attr(env, "col.names") <- names(varlist)
   attr(env, "row.names") <- row.names
+  attr(env, "listeners") <- list()
   env
 }
 
