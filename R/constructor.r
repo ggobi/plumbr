@@ -1,9 +1,9 @@
 ## constructor
-pframe <- function(..., row.names = NULL) {
+mutaframe <- function(..., row.names = NULL) {
   listData <- list(...)
 
-  # If no data, return NULL pframe
-  if (length(listData) == 0) return(.pframe())
+  # If no data, return NULL mutaframe
+  if (length(listData) == 0) return(.mutaframe())
 
   # Work out names
   names(listData) <- variable_names(names(listData) %||% 
@@ -13,7 +13,7 @@ pframe <- function(..., row.names = NULL) {
   varlist <- vector("list", length(listData))
   nrows <- ncols <- integer(length(varnames))
   for (i in seq_along(listData)) {
-    element <- try(as.pframe(listData[[i]]), silent = TRUE)
+    element <- try(as.mutaframe(listData[[i]]), silent = TRUE)
     if (inherits(element, "try-error"))
       stop("cannot coerce class \"", class(listData[[i]]),
            "\" to a DataFrame")
@@ -60,17 +60,17 @@ pframe <- function(..., row.names = NULL) {
     row.names <- as.character(row.names)
   } else row.names <- as.character(seq(max(nr)))
 
-  env <- .pframe(varlist, row.names)
+  env <- .mutaframe(varlist, row.names)
   # provenance(env) <- sys.call()
   env
 }
 
 #' Raw constructor.
-#' Constructs a pframe without checking that variables are of the correct
+#' Constructs a mutaframe without checking that variables are of the correct
 #' type and length.
-.pframe <- function(varlist = list(), row.names = NULL) {
+.mutaframe <- function(varlist = list(), row.names = NULL) {
   env <- new.env(parent = emptyenv())
-  class(env) <- c("pframe", class(env))
+  class(env) <- c("mutaframe", class(env))
   mapply(function(name, value) {
     if (is.function(value))
       makeActiveBinding(name, value, env)

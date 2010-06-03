@@ -2,11 +2,11 @@
 
 # Any operation that would return a 
 
-"$.pframe" <- function(x, name) {
+"$.mutaframe" <- function(x, name) {
   x[[name, exact=FALSE]]
 }
 
-"[[.pframe" <- function(x, i, j, ...) {
+"[[.mutaframe" <- function(x, i, j, ...) {
   dotArgs <- list(...)
   if (length(dotArgs) > 0)
     dotArgs <- dotArgs[names(dotArgs) != "exact"]
@@ -29,13 +29,13 @@
   get(i, x, inherits=FALSE)
 }
 
-"$<-.pframe" <- function(x, name, value) {
+"$<-.mutaframe" <- function(x, name, value) {
   x[[name]] <- value
   x
 }
 
 ### TODO: emit events
-"[[<-.pframe" <- function(x, i, j,..., value) {
+"[[<-.mutaframe" <- function(x, i, j,..., value) {
   nrx <- nrow(x)
   lv <- length(value)
   if (!missing(j) || length(list(...)) > 0)
@@ -70,7 +70,7 @@
   x
 }
 
-"[.pframe" <- function(x, i, j, ..., drop) {
+"[.mutaframe" <- function(x, i, j, ..., drop) {
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
   
@@ -87,7 +87,7 @@
     varlist <- .proxyVars(x, iInfo[["idx"]])
     if (anyDuplicated(names(varlist)))
       names(varlist) <- make.unique(names(varlist))
-    return(.pframe(varlist, rownames(x)))
+    return(.mutaframe(varlist, rownames(x)))
   }
 
 ### NOTE: the indexing into columns is static, so negative column
@@ -129,12 +129,12 @@
     varlist <- .proxyVars(x, j, i)
     if (anyDuplicated(names(varlist)))
       names(varlist) <- make.unique(names(varlist))
-    .pframe(varlist, rn)
+    .mutaframe(varlist, rn)
   }
 }
 
 ### TODO: emit events
-"[<-.pframe" <- function(x, i, j, ..., value) {
+"[<-.mutaframe" <- function(x, i, j, ..., value) {
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
   
@@ -167,7 +167,7 @@
   i <- iInfo[["idx"]]
   j <- jInfo[["idx"]]
   useI <- iInfo[["useIdx"]]
-  if (!is(value, "pframe")) {
+  if (!is(value, "mutaframe")) {
     if (useI)
       li <- length(i)
     else

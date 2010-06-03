@@ -1,7 +1,7 @@
 context("Mutability")
 
 test_that("changing one affects copies", {
-  a <- pframe(a = 1:10)
+  a <- mutaframe(a = 1:10)
   b <- a
   
   a[1,1] <- 2
