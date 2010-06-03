@@ -75,7 +75,7 @@ mutaframe <- function(..., row.names = NULL) {
   # Ensure all atomic vectors converted to binding functions
   binders <- as.list(varlist)
   fun <- sapply(varlist, is.function)
-  binders[!fun] <- .rawBinding(binders[!fun])
+  binders[!fun] <- .rawBinding(mf, binders[!fun])
   
   # Activate bindings
   for(name in names(binders)) {

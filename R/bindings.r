@@ -14,6 +14,7 @@
       if (missing(v)) {
         get(sym, mf)
       } else {
+        notify_listeners(mf, sym, which[v != get(sym, mf)])
         assign(sym, v, mf)
       } 
     }
@@ -33,6 +34,7 @@
       if (missing(v))
         xval
       else {
+        notify_listeners(mf, sym, i[xval != v])
         xval[i] <- v
         assign(sym, xval, mf)
       }
@@ -46,12 +48,13 @@
 #' 
 #' @param data list of values
 #' @returns named list of binding functions
-.rawBinding <- function(data) {
+.rawBinding <- function(mf, data) {
   binder <- function(sym) {
     function(v) {
       if (missing(v)) {
         data[[sym]]
       } else {
+        notify_listeners(mf, sym, which(data[[sym]] != v))
         data[[sym]] <<- v
       }      
     }

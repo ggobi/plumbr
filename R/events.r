@@ -24,6 +24,8 @@ listeners <- function(mf) {
   attr(mf, "listeners")
 }
 
-inform_listeners <- function(mf, i, j) {
-  message("change!")
+notify_listeners <- function(mf, i, j) {
+  for(listener in attr(mf, "listeners")) {
+    listener(i, j)
+  }
 }
