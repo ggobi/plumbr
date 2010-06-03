@@ -23,3 +23,7 @@ add_listener <- function(mf, callback) {
 listeners <- function(mf) {
   attr(mf, "listeners")
 }
+
+inform_listeners <- function(mf, i, j) {
+  message("change!")
+}

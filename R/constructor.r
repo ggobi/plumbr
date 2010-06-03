@@ -21,7 +21,7 @@ mutaframe <- function(..., row.names = NULL) {
     ncols[i] <- ncol(element)
     varlist[[i]] <-
       if (is.environment(listData[[i]]))
-        .proxyVars(element, names(element))
+        .proxyBinding(element, names(element))
       else as.list(element)
     if ((length(dim(listData[[i]])) > 1) ||
         (ncol(element) > 1)) {
@@ -60,6 +60,7 @@ mutaframe <- function(..., row.names = NULL) {
     row.names <- as.character(row.names)
   } else row.names <- as.character(seq(max(nr)))
 
+
   env <- .mutaframe(varlist, row.names)
   # provenance(env) <- sys.call()
   env
@@ -69,18 +70,23 @@ mutaframe <- function(..., row.names = NULL) {
 #' Constructs a mutaframe without checking that variables are of the correct
 #' type and length.
 .mutaframe <- function(varlist = list(), row.names = NULL) {
-  env <- new.env(parent = emptyenv())
-  class(env) <- c("mutaframe", class(env))
+  mf <- new.env(parent = emptyenv())
   
-  mapply(function(name, value) {
-    if (is.function(value))
-      makeActiveBinding(name, value, env)
-    else assign(name, value, env)
-  }, names(varlist), varlist)
-  ## we have the names in the 'env', but this keeps their order
-  attr(env, "col.names") <- names(varlist)
-  attr(env, "row.names") <- row.names
-  attr(env, "listeners") <- list()
-  env
+  # Ensure all atomic vectors converted to binding functions
+  binders <- as.list(varlist)
+  fun <- sapply(varlist, is.function)
+  binders[!fun] <- .rawBinding(binders[!fun])
+  
+  # Activate bindings
+  for(name in names(binders)) {
+    makeActiveBinding(name, binders[[name]], mf)
+  }
+
+  structure(mf,
+    col.names = names(varlist), # keep variable order
+    row.names = row.names,
+    listeners = list(),
+    class = c("mutaframe", class(mf))
+  )
 }
 

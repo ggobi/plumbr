@@ -85,7 +85,7 @@
     if (!is.null(iInfo[["msg"]]))
       stop("subsetting as list: ", iInfo[["msg"]])
     
-    filter_proxy(x, j = iInfo[["idx"]])
+    filter_proxy(x, j = iInfo[["idx"]], rn = rownames(x))
   }
 
 ### NOTE: the indexing into columns is static, so negative column
@@ -124,12 +124,12 @@
     x[[j]][i]
   } else {
     # Otherwise return proxy
-    filter_proxy(x, i, j)
+    filter_proxy(x, i, j, rn)
   }
 }
 
 ### TODO: emit events
-"[<-.mutaframe" <- function(x, i, j, ..., value) {
+"[<-.mutaframe" <- function(x, i, j, ..., value) {  
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
   
