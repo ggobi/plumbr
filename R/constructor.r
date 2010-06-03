@@ -71,6 +71,7 @@ mutaframe <- function(..., row.names = NULL) {
 .mutaframe <- function(varlist = list(), row.names = NULL) {
   env <- new.env(parent = emptyenv())
   class(env) <- c("mutaframe", class(env))
+  
   mapply(function(name, value) {
     if (is.function(value))
       makeActiveBinding(name, value, env)

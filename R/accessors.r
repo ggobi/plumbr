@@ -84,10 +84,8 @@
     iInfo <- .bracket.Index(i, ncol(x), colnames(x))
     if (!is.null(iInfo[["msg"]]))
       stop("subsetting as list: ", iInfo[["msg"]])
-    varlist <- .proxyVars(x, iInfo[["idx"]])
-    if (anyDuplicated(names(varlist)))
-      names(varlist) <- make.unique(names(varlist))
-    return(.mutaframe(varlist, rownames(x)))
+    
+    filter_proxy(x, j = iInfo[["idx"]])
   }
 
 ### NOTE: the indexing into columns is static, so negative column
@@ -126,10 +124,7 @@
     x[[j]][i]
   } else {
     # Otherwise return proxy
-    varlist <- .proxyVars(x, j, i)
-    if (anyDuplicated(names(varlist)))
-      names(varlist) <- make.unique(names(varlist))
-    .mutaframe(varlist, rn)
+    filter_proxy(x, i, j)
   }
 }
 
