@@ -14,7 +14,7 @@ proxy_bindings <- function(mf, j = names(mf)) {
       if (missing(v)) {
         get(sym, mf)
       } else {
-        notify_listeners(mf, sym, which[v != get(sym, mf)])
+        notify_listeners(mf, which[v != get(sym, mf)], sym)
         assign(sym, v, mf)
       } 
     }
@@ -34,7 +34,7 @@ filter_bindings <- function(mf, j = names(mf), i) {
       if (missing(v))
         xval
       else {
-        notify_listeners(mf, sym, i[xval != v])
+        notify_listeners(mf, i[xval != v], sym)
         xval[i] <- v
         assign(sym, xval, mf)
       }
@@ -54,7 +54,7 @@ raw_bindings <- function(mf, data) {
       if (missing(v)) {
         data[[sym]]
       } else {
-        notify_listeners(mf, sym, which(data[[sym]] != v))
+        notify_listeners(mf, which(data[[sym]] != v), sym)
         data[[sym]] <<- v
       }      
     }

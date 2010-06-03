@@ -13,3 +13,5 @@ as.mutaframe.default <- function(x) as.mutaframe(as.data.frame(x))
 
 as.data.frame.mutaframe <- function(x, row.names=NULL, optional=FALSE, ...) {
 }
+
+is.mutaframe <- function(x) inherits(x, "mutaframe")

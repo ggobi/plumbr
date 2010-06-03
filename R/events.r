@@ -25,7 +25,7 @@ listeners <- function(mf) {
 }
 
 notify_listeners <- function(mf, i, j) {
-  for(listener in attr(mf, "listeners")) {
+  for(listener in listeners(mf)) {
     listener(i, j)
   }
 }

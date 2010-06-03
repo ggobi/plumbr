@@ -6,8 +6,6 @@ filter_proxy <- function(mf, i = NULL, j = NULL, rn) {
     varlist <- filter_bindings(mf, j, i)    
   }
 
-  if (anyDuplicated(names(varlist)))
-    names(varlist) <- make.unique(names(varlist))
   .mutaframe(varlist, rn)
 }
 

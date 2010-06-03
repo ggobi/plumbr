@@ -13,10 +13,11 @@ mutaframe <- function(..., row.names = NULL) {
   varlist <- vector("list", length(listData))
   nrows <- ncols <- integer(length(varnames))
   for (i in seq_along(listData)) {
-    element <- try(as.mutaframe(listData[[i]]), silent = TRUE)
-    if (inherits(element, "try-error"))
-      stop("cannot coerce class \"", class(listData[[i]]),
-           "\" to a DataFrame")
+    element <- listData[[i]]
+    if (!is.mutaframe(element)) {
+      element <- as.data.frame(element)
+    }
+
     nrows[i] <- nrow(element)
     ncols[i] <- ncol(element)
     varlist[[i]] <-
@@ -67,8 +68,7 @@ mutaframe <- function(..., row.names = NULL) {
 }
 
 #' Raw constructor.
-#' Constructs a mutaframe without checking that variables are of the correct
-#' type and length.
+#' Constructs a mutaframe from a list of variables/bindings.
 .mutaframe <- function(varlist = list(), row.names = NULL) {
   mf <- new.env(parent = emptyenv())
   
