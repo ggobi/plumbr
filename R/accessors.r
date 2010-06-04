@@ -78,39 +78,39 @@
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
   
-  ## no ',' -- forward to list
-  ## NOTE: matrix-style subsetting by logical matrix not supported
+  # Single item subsetting: e.g. mtcars[], mtcars[1], mtcars["mpg"]
+  # NOTE: matrix-style subsetting by logical matrix not supported
   if ((nargs() - !missing(drop)) < 3) { 
     if (!missing(drop))
       warning("parameter 'drop' ignored by list-style subsetting")
     if (missing(i))
       return(x)
     iInfo <- .bracket.Index(i, ncol(x), colnames(x))
-    if (!is.null(iInfo[["msg"]]))
-      stop("subsetting as list: ", iInfo[["msg"]])
+    if (!is.null(iInfo$msg))
+      stop("subsetting as list: ", iInfo$msg)
     
-    return(filter_proxy(x, j = iInfo[["idx"]], rn = rownames(x)))
+    return(filter_proxy(x, j = iInfo$idx, rn = rownames(x)))
   }
 
-### NOTE: the indexing into columns is static, so negative column
-### indices will not allow new columns to propagate
-  
+  ### NOTE: the indexing into columns is static, so negative column
+  ### indices will not propagate new columns
+    
   dim <- dim(x)
   rn <- rownames(x)
   if (!missing(j)) {
     jInfo <- .bracket.Index(j, ncol(x), colnames(x))
-    if (!is.null(jInfo[["msg"]]))
-      stop("selecting cols: ", jInfo[["msg"]])
-    j <- jInfo[["idx"]]
+    if (!is.null(jInfo$msg))
+      stop("selecting cols: ", jInfo$msg)
+    j <- jInfo$idx
     dim[2L] <- length(j)
   } else j <- names(x)
   
   if (!missing(i)) {
     iInfo <- .bracket.Index(i, nrow(x), rownames(x), dup.nms = TRUE,
                             allowNumeric = TRUE)
-    if (!is.null(iInfo[["msg"]]))
-      stop("selecting rows: ", iInfo[["msg"]])
-    i <- iInfo[["idx"]]  
+    if (!is.null(iInfo$msg))
+      stop("selecting rows: ", iInfo$msg)
+    i <- iInfo$idx  
     dim[1L] <- length(seq(dim[1L])[i]) # may have 0 cols, no rownames
     rn <- rn[i]
     if (anyDuplicated(rn))
@@ -135,12 +135,15 @@
 "[<-.mutaframe" <- function(x, i, j, ..., value) {  
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
-  
+
+  # x[] <- a OR x[ , ] <- a
+  # x[, j] <- a
+  # x[i ,] <- a
+  # x[i ,j] <- a
   if (nargs() < 4) {
     iInfo <- list(msg = NULL, useIdx = FALSE, idx = NULL)
     if (missing(i)) {
-      jInfo <-
-        list(msg = NULL, useIdx = FALSE, idx = seq_len(ncol(x)))
+      jInfo <- list(msg = NULL, useIdx = FALSE, idx = seq_len(ncol(x)))
     } else {
       jInfo <- .bracket.Index(i, ncol(x), colnames(x), new.nms = TRUE)
     }
@@ -152,20 +155,19 @@
         new.nms = TRUE)
     }
     if (missing(j)) {
-      jInfo <-
-        list(msg = NULL, useIdx = FALSE, idx = seq_len(ncol(x)))
+      jInfo <- list(msg = NULL, useIdx = FALSE, idx = seq_len(ncol(x)))
     } else {
       jInfo <- .bracket.Index(j, ncol(x), colnames(x), new.nms = TRUE)
     }
   }
-  if (!is.null(iInfo[["msg"]]))
-    stop("replacing rows: ", iInfo[["msg"]])
-  if (!is.null(jInfo[["msg"]]))
-    stop("replacing cols: ", jInfo[["msg"]])
-  i <- iInfo[["idx"]]
-  j <- jInfo[["idx"]]
+  if (!is.null(iInfo$msg))
+    stop("replacing rows: ", iInfo$msg)
+  if (!is.null(jInfo$msg))
+    stop("replacing cols: ", jInfo$msg)
+  i <- iInfo$idx
+  j <- jInfo$idx
 
-  useI <- iInfo[["useIdx"]]  
+  useI <- iInfo$useIdx  
   if (useI) {
     li <- length(i)
   } else {
@@ -205,15 +207,11 @@
   x
 }
 
-anyMissingOrOutside <- function(x, lower = -.Machine$integer.max,
-                                upper = .Machine$integer.max)
-{
+anyMissingOrOutside <- function(x, lower = -.Machine$integer.max,                               upper = .Machine$integer.max) {
   any(is.na(x) | x < lower | x > upper)
 }
 
-.bracket.Index <-
-  function(idx, lx, nms = NULL, dup.nms = FALSE, new.nms = FALSE, allowNumeric = FALSE)
-{
+.bracket.Index <- function(idx, lx, nms = NULL, dup.nms = FALSE, new.nms = FALSE, allowNumeric = FALSE) {
   msg <- NULL
   if (is.numeric(idx)) {
     if (!is.integer(idx))
