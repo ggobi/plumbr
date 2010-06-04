@@ -1,9 +1,3 @@
-### FIXME: want to get out active binding function, but this is not possible
-### We could store the functions separately... not sure.. optimize later
-### TODO: register listeners to forward changes
-### TODO: register listener to catch column deletion
-### NOTE: not clear how many cases this should handle.. row subsetting too much?
-
 #' Generate binding for proxies.
 #'
 #' @param x mutaframe to inherit from
@@ -23,7 +17,7 @@ proxy_bindings <- function(mf, j = names(mf)) {
 }
 
 #' @param i rows to filter
-#' @returns named list of binding functions
+#' @return named list of binding functions
 filter_bindings <- function(mf, j = names(mf), i) {
   binder <- function(sym) {
     function(v) {
@@ -45,7 +39,7 @@ filter_bindings <- function(mf, j = names(mf), i) {
 #' Generate binding for raw values
 #' 
 #' @param data list of values
-#' @returns named list of binding functions
+#' @return named list of binding functions
 raw_bindings <- function(mf, data) {
   binder <- function(sym) {
     function(new) {

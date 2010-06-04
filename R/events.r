@@ -5,8 +5,8 @@
 #' indicating a change in the shape of the underlying data, or they give the
 #' the locations of changed data values.
 #'
-#' @params mf muta frame
-#' @params callback function with arguments i and j
+#' @param mf muta frame
+#' @param callback function with arguments i and j
 #' @export
 add_listener <- function(mf, callback) {
   attr(mf, "listeners") <- append(listeners(mf), callback)
@@ -14,8 +14,8 @@ add_listener <- function(mf, callback) {
 
 #' Is the event a shape changed event?
 #' 
-#' @params i col index
-#' @params j row index
+#' @param i col index
+#' @param j row index
 #' @export
 shape_changed <- function(i, j) is.null(i) || is.null(j)
 
@@ -24,8 +24,8 @@ shape_changed <- function(i, j) is.null(i) || is.null(j)
 #' If any event is a \code{shape_changed} event, return it.  Otherwise, 
 #' take the unique elements of the union of all element changes.
 #'
-#' @events a list of event parameters
-#' @returns a unified event
+#' @param events a list of event parameters
+#' @return a unified event
 combine_data_events <- function(events) {
   for(event in events) {
     if (shape_changed(event$i, event$j)) return(list(i = NULL, j = NULL))

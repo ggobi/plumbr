@@ -1,4 +1,5 @@
-## constructor
+#' Create a mutaframe, a mutable data.frame
+#' @export
 mutaframe <- function(..., row.names = NULL) {
   listData <- list(...)
 

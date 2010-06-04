@@ -1,7 +1,3 @@
-## extraction
-
-# Any operation that would return a 
-
 "$.mutaframe" <- function(x, name) {
   x[[name, exact=FALSE]]
 }

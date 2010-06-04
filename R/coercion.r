@@ -1,5 +1,3 @@
-## coercion
-
 as.mutaframe <- function(x, ...) UseMethod("as.mutaframe")
 as.mutaframe.mutaframe <- function(x) {
   cl <- oldClass(x)
