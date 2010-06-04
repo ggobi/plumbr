@@ -59,5 +59,10 @@ test_that("pausing combines data events", {
   unpause(a)
   expect_that(event, equals(list(i = 1, j = "a")))
 
-  
+  pause(a)
+  a[1, 1] <- 2
+  a$b <- 1:10
+  unpause(a)
+  expect_that(event, equals(list(i = NULL, j = NULL)))
+
 })
