@@ -7,8 +7,8 @@ mutaframe <- function(..., row.names = NULL) {
   if (length(listData) == 0) return(.mutaframe())
 
   # Work out names
-  names(listData) <- variable_names(names(listData) %||% 
-    rep(NA_character_, length(listData)))
+  orig_names <- names(listData) %||% rep(NA_character_, length(listData))
+  names(listData) <- variable_names(orig_names)
   
   varnames <- as.list(names(listData))
   varlist <- vector("list", length(listData))
@@ -27,10 +27,12 @@ mutaframe <- function(..., row.names = NULL) {
       else as.list(element)
     if ((length(dim(listData[[i]])) > 1) ||
         (ncol(element) > 1)) {
-      if (emptynames[i])
+          
+      if (is.na(orig_names[i])) {
         varnames[[i]] <- colnames(element)
-      else
+      } else {
         varnames[[i]] <- paste(varnames[[i]], colnames(element), sep = ".")
+      }
     }
   }
   nr <- max(nrows)

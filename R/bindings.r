@@ -13,7 +13,10 @@ proxy_bindings <- function(mf, j = names(mf)) {
     }
   }
   names(j) <- j
-  lapply(j, binder)
+  lapply(j, function(name) {
+    force(name)
+    binder(name)
+  })
 }
 
 #' @param i rows to filter
@@ -33,7 +36,10 @@ filter_bindings <- function(mf, j = names(mf), i) {
     }
   }    
   names(j) <- j
-  lapply(j, binder)
+  lapply(j, function(name) {
+    force(name)
+    binder(name)
+  })
 }
 
 #' Generate binding for raw values
@@ -52,5 +58,8 @@ raw_bindings <- function(mf, data) {
       }      
     }
   }
-  lapply(names(data), binder)
+  lapply(names(data), function(name) {
+    force(name)
+    binder(name)
+  })
 }

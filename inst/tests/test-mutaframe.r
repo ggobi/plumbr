@@ -15,7 +15,6 @@ test_that("can construct single column mutaframes", {
   
   b <- mutaframe(a = 1:10)
   expect_that(ncol(a), equals(1))
-  
 })
 
 test_that("shorter columns recycled", {
@@ -40,4 +39,24 @@ test_that("default names behave like data.frame", {
   c <- mutaframe(`a b` = 1)
   expect_that(names(c), equals("a.b"))
   
+})
+
+test_that("can construct from a dataframe", {
+  m <- mutaframe(mtcars)
+
+  expect_that(names(m), equals(names(mtcars)))
+  expect_that(dim(m), equals(dim(mtcars)))
+  
+  expect_that(m[, 1], equals(mtcars[, 1]))
+  expect_that(m[, 5], equals(mtcars[, 5]))
+})
+
+test_that("coercing data frame works", {
+  m <- as.mutaframe(mtcars)
+
+  expect_that(names(m), equals(names(mtcars)))
+  expect_that(dim(m), equals(dim(mtcars)))
+  
+  expect_that(m[, 1], equals(mtcars[, 1]))
+  expect_that(m[, 5], equals(mtcars[, 5]))
 })
