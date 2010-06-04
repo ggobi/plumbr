@@ -66,3 +66,18 @@ test_that("pausing combines data events", {
   expect_that(event, equals(list(i = NULL, j = NULL)))
 
 })
+
+test_that("complicated system doesn't cause endless loop", {
+  a <- mutaframe(a = rep(1, 10))
+  
+  a1 <- a[1:5, , drop = FALSE]
+  a2 <- a[1:9, , drop = FALSE]
+  
+  a1a <- a1[1:3, , drop = FALSE]
+  a1b <- a1[3:5, , drop = FALSE]
+  
+  a1a[3, 1] <- 2  
+  
+  expect_that(a[3, 1], equals(2))
+  expect_that(a1b[1, 1], equals(2))
+})
