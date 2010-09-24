@@ -8,7 +8,10 @@ mutaframe <- function(..., row.names = NULL) {
 
   # Work out names
   orig_names <- names(listData) %||% rep(NA_character_, length(listData))
-  names(listData) <- variable_names(orig_names)
+  # Don't touch the child elements that already have colnames
+  null_names <- sapply(sapply(listData, colnames, simplify = FALSE), is.null)
+  names(listData)[null_names] <- variable_names(orig_names[null_names])
+  names(listData)[!null_names] <- orig_names[!null_names] <- NA_character_
   
   varnames <- as.list(names(listData))
   varlist <- vector("list", length(listData))
