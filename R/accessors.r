@@ -52,7 +52,7 @@
     stop("attempt to select more than one element")
   if (is.numeric(i) && (i < 1L || i > ncol(x) + 1L))
     stop("subscript out of bounds")
-  if (!is.null(value) && (nrx != lv)) {
+  if (!is.null(value) && !is.function(value) && (nrx != lv)) {
     if ((nrx == 0) || (nrx %% lv != 0))
       stop(paste(lv, "elements in value to replace", nrx, "elements"))
     else value <- rep(value, length.out = nrx)
@@ -69,8 +69,11 @@
     names(x) <- nms
     i <- tail(nms, 1L)
     notify_listeners(x, NULL, NULL)
-  }
-  assign(i, value, x)
+    if (!is.function(value))
+      value <- raw_binding(x, i, value)
+    makeActiveBinding(i, value, x)
+  } else assign(i, value, x)
+  
   x
 }
 

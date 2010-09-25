@@ -42,24 +42,29 @@ filter_bindings <- function(mf, j = names(mf), i) {
   })
 }
 
-#' Generate binding for raw values
-#' 
-#' @param data list of values
-#' @return named list of binding functions
-raw_bindings <- function(mf, data) {
-  binder <- function(sym) {
-    function(new) {
-      old <- data[[sym]]
-      if (missing(new)) {
-        old
-      } else {
-        notify_listeners(mf, which(old != new), sym)
-        data[[sym]] <<- new
-      }      
+##' Generate binding for raw values
+##' 
+##' @param data vector to store
+##' @return named list of binding functions
+raw_binding <- function(mf, name, data) {
+  force(name)
+  force(data)
+  function(new) {
+    if (missing(new)) {
+      data
+    } else {
+      notify_listeners(mf, which(data != new), name)
+      data <<- new
     }
   }
-  lapply(names(data), function(name) {
-    force(name)
-    binder(name)
-  })
+}
+
+##' Generate binding for raw values
+##' 
+##' @param data list of values
+##' @return named list of binding functions
+raw_bindings <- function(mf, data) {
+  if (is.null(names(data)))
+    stop("'data' must have names")
+  mapply(raw_binding, names(data), data, MoreArgs = list(mf = mf))
 }
