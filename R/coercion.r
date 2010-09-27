@@ -12,7 +12,7 @@ as.mutaframe.default <- function(x) as.mutaframe(as.data.frame(x))
 as.data.frame.mutaframe <- function(x, row.names=NULL, optional=FALSE, ...) {
   cols <- lapply(names(x), function(j) x[[j]])
   names(cols) <- names(x)
-  as.data.frame(cols)
+  as.data.frame(cols, row.names = row.names, optional = optional, ...)
 }
 
 is.mutaframe <- function(x) inherits(x, "mutaframe")
