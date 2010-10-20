@@ -136,6 +136,7 @@ names.mutalist <- function(x) .userNames(x)
     i <- m
   }
   assign(.envNames(x)[i], value, x)
+  x
 }
 
 `$<-.mutalist` <- function(x, name, value) {
