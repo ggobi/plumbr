@@ -161,7 +161,7 @@ names.mutalist <- function(x) .userNames(x)
   do.call(mutalist, l)
 }
 
-`[<-` <- function(x, i, j, ..., value) {
+`[<-.mutalist` <- function(x, i, j, ..., value) {
   if (!missing(j) || length(list(...)) > 0)
     stop("invalid replacement")
   l <- as.list(x)
@@ -190,7 +190,7 @@ head.mutalist <- function(x, n = 6L, ...) {
 tail.mutalist <- function(x, n = 6L, ...) {
   stopifnot(length(n) == 1L)
   xlen <- length(x)
-  if (n < 0L) 
+  if (n < 0L)
     n <- max(xlen + n, 0L)
   else
     n <- min(n, xlen)
@@ -244,7 +244,7 @@ rev.mutalist <- function(x) {
   if (length(x) == 0)
     x
   else
-    x[length(x):1]  
+    x[length(x):1]
 }
 
 rep.mutalist <- function(x, ...)
