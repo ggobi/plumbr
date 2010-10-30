@@ -1,0 +1,50 @@
+
+## mutaframe data.frame style accessors
+S3method("$", mutaframe)
+S3method("[[", mutaframe)
+S3method("$<-", mutaframe)
+S3method("[[<-", mutaframe)
+S3method("[", mutaframe)
+S3method("[<-", mutaframe)
+S3method(nrow, mutaframe)
+S3method(ncol, mutaframe)
+S3method(dim, mutaframe)
+S3method("names<-", mutaframe)
+S3method(names, mutaframe)
+S3method("dimnames<-", mutaframe)
+S3method(dimnames, mutaframe)
+
+## mutalist list style accessors
+S3method("names<-", mutalist)
+S3method(names, mutalist)
+S3method("[[", mutalist)
+S3method("[[<-", mutalist)
+S3method("$<-", mutalist)
+S3method("[<-", mutalist)
+S3method("[", mutalist)
+S3method(head, mutalist)
+S3method(tail, mutalist)
+
+## coercion
+export(as.mutaframe, is.mutaframe)
+S3method(as.data.frame, mutaframe)
+S3method(as.list, mutalist)
+
+## construction
+export(mutaframe, mutalist)
+
+## events
+export(add_listener, shape_changed, listeners, notify_listeners, pause, unpause,
+       is_paused)
+
+## utilities
+S3method(c, mutalist)
+S3method(lapply, mutalist)
+S3method(unlist, mutalist)
+S3method(rev, mutalist)
+S3method(rep, mutalist)
+export(mutalist2env)
+
+## printing
+S3method(print, mutaframe)
+S3method(print, mutalist)
