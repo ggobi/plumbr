@@ -251,3 +251,6 @@ rev.mutalist <- function(x) {
 rep.mutalist <- function(x, ...)
   x[rep(seq_len(length(x)), ...)]
 
+print.mutalist <- function(x) {
+  print(as.list(x))
+}
