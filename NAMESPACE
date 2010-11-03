@@ -28,6 +28,8 @@ S3method(tail, mutalist)
 ## coercion
 export(as.mutaframe, is.mutaframe)
 S3method(as.data.frame, mutaframe)
+S3method(as.mutaframe, default)
+S3method(as.mutaframe, data.frame)
 S3method(as.list, mutalist)
 
 ## construction
