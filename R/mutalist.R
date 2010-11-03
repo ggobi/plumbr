@@ -102,7 +102,7 @@ names.mutalist <- function(x) .userNames(x)
       return(NULL)
     i <- m
   }
-  get(x, .envNames(x)[i])
+  get(.envNames(x)[i], x)
 }
 
 `[[<-.mutalist` <- function(x, i, j, ..., value) {
