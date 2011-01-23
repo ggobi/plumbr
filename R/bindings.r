@@ -52,9 +52,9 @@ raw_binding <- function(mf, name, data) {
   function(new) {
     if (missing(new)) {
       data
-    } else {
-      notify_listeners(mf, which(data != new), name)
+    } else {      
       data <<- new
+      notify_listeners(mf, which(data != new), name)
     }
   }
 }
