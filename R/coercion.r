@@ -7,7 +7,7 @@ as.mutaframe.mutaframe <- function(x) {
   x
 }
 as.mutaframe.data.frame <- function(x) .mutaframe(x, rownames(x))
-as.mutaframe.default <- function(x) as.mutaframe(as.data.frame(x))
+as.mutaframe.default <- function(x, ...) as.mutaframe(as.data.frame(x, ...))
 
 as.data.frame.mutaframe <- function(x, row.names=NULL, optional=FALSE, ...) {
   cols <- lapply(names(x), function(j) x[[j]])
