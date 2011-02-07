@@ -30,6 +30,7 @@ export(as.mutaframe, is.mutaframe)
 S3method(as.data.frame, mutaframe)
 S3method(as.mutaframe, default)
 S3method(as.mutaframe, data.frame)
+S3method(as.mutaframe, mutaframe)
 S3method(as.list, mutalist)
 
 ## construction
@@ -38,6 +39,10 @@ export(mutaframe, mutalist)
 ## events
 export(add_listener, shape_changed, listeners, notify_listeners, pause, unpause,
        is_paused)
+
+## signals
+export(Signal)
+exportClasses("Signal")
 
 ## utilities
 S3method(c, mutalist)
