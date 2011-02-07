@@ -54,10 +54,10 @@
 ## signal$emit(0); signal$emit(1); signal$emit(3)
 ## signal$flush()
 
-## signal$accumulator <- function(prev, cur) {
+## signal$accumulator(function(prev, cur) {
 ##   prev$x <- c(prev$x, cur$x)
 ##   prev
-## }
+## })
 ## signal$buffer()
 ## signal$emit(0); signal$emit(1); signal$emit(3)
 ## signal$flush()
@@ -81,13 +81,13 @@ Signal <- function(...) {
       return(invisible())
     if (buffered) {
       event <- lapply(match.call()[-1], eval)
-      if (!is.null(body(accumulator)) && length(queue))
+      if (length(formals(accumulator)) == 2L && length(queue))
         queue[[1]] <<- accumulator(queue[[1]], event)
       else queue <<- c(queue, list(event))
-      return(invisible())
+    } else { 
+      for (listener in listeners)
+        eval(listener)
     }
-    for (listener in listeners)
-      eval(listener)
     invisible()    
   })), signal@.xData) # is getting .xData bad practice?
   signal
@@ -134,11 +134,23 @@ Signal.gen$methods(buffer = function() {
 })
 
 Signal.gen$methods(flush = function() {
+  if (length(formals(accumulator)) == 1L)
+    queue <<- list(accumulator(queue))
   buffered <<- FALSE
   accumulator <<- function() NULL
   lapply(queue, do.call, what = emit)
   queue <<- list()
   invisible(.self)
+})
+
+## Allows C++-style initializer chaining
+Signal.gen$methods(accumulator = function(value) {
+  if (missing(value))
+    accumulator
+  else {
+    accumulator <<- value
+    invisible(.self)
+  }
 })
 
 setMethod("show", "Signal", function(object) {
