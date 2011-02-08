@@ -29,10 +29,12 @@
 
 ## tests:
 
-## signal <- Signal(x, y, z = NA)
-## signal$connect(function(n, x, option = "none") message("x:", x))
-## signal$connect(function(z, ...) message("z:", z, " x:", list(...)$x))
-## signal$emit(0, 1)
+Signal(x, y)
+
+signal <- Signal(x, y, z = NA)
+signal$connect(function(n, x, option = "none") message("x:", x))
+signal$connect(function(z, ...) message("z:", z, " x:", list(...)$x))
+signal$emit(0, 1)
 
 ## id <- signal$connect(function(x, y, option = "none")
 ##                      message("y:", y, " op:", option),
@@ -72,7 +74,9 @@ Signal.gen <- setRefClass("Signal",
 
 Signal <- function(...) {
   call <- sys.call()[-1L]
-  hasDefault <- if (is.null(names(call))) FALSE else nzchar(names(call))
+  hasDefault <- if (is.null(names(call)))
+      rep(FALSE, length(call))
+    else nzchar(names(call))
   names(call)[!hasDefault] <- sapply(call[!hasDefault], deparse)
   call[!hasDefault] <- alist(foo=)
   signal <- Signal.gen$new(idCounter = 0L, blocked = FALSE, buffered = FALSE)
