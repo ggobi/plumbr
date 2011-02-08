@@ -65,10 +65,10 @@
 ## signal$flush()
 
 Signal.gen <- setRefClass("Signal",
-                          fields = list(listeners = "list", emit = "function",
-                            idCounter = "integer", blocked = "logical",
-                            buffered = "logical", queue = "list",
-                            accumulator = "function"))
+                          fields = list(.listeners = "list", emit = "function",
+                            .idCounter = "integer", .blocked = "logical",
+                            .buffered = "logical", .queue = "list",
+                            .accumulator = "function"))
 
 Signal <- function(...) {
   call <- sys.call()[-1L]
@@ -78,17 +78,17 @@ Signal <- function(...) {
     else nzchar(names(call))
   names(call)[!hasDefault] <- sapply(call[!hasDefault], deparse)
   call[!hasDefault] <- alist(foo=)
-  signal <- Signal.gen$new(idCounter = 0L, blocked = FALSE, buffered = FALSE)
+  signal <- Signal.gen$new(.idCounter = 0L, .blocked = FALSE, .buffered = FALSE)
   signal$emit <- as.function(c(as.list(call), quote({
-    if (blocked)
+    if (.blocked)
       return(invisible())
-    if (buffered) {
+    if (.buffered) {
       event <- lapply(match.call()[-1], eval)
-      if (length(formals(accumulator)) == 2L && length(queue))
-        queue[[1]] <<- accumulator(queue[[1]], event)
-      else queue <<- c(queue, list(event))
+      if (length(formals(.accumulator)) == 2L && length(.queue))
+        .queue[[1]] <<- .accumulator(.queue[[1]], event)
+      else .queue <<- c(.queue, list(event))
     } else { 
-      for (listener in listeners)
+      for (listener in .listeners)
         eval(listener)
     }
     invisible()    
@@ -109,54 +109,53 @@ Signal.gen$methods(connect = function(FUN, ...) {
   if (!("..." %in% names(wrapperFormals)))
     wrapperFormals <- c(wrapperFormals, alist(...=))
   wrapper <- as.function(c(wrapperFormals, as.call(c(FUN, handlerArgs))))
-  idCounter <<- idCounter + 1L
-  id <- as.character(idCounter)
-  listeners[[id]] <<- as.call(c(list(wrapper), args))
+  .idCounter <<- .idCounter + 1L
+  id <- as.character(.idCounter)
+  .listeners[[id]] <<- as.call(c(list(wrapper), args))
   invisible(id)
 })
 
 Signal.gen$methods(disconnect = function(id) {
-  listeners[[id]] <<- NULL
+  .listeners[[id]] <<- NULL
   invisible(.self)
 })
 
 Signal.gen$methods(block = function() {
-  blocked <<- TRUE
+  .blocked <<- TRUE
   invisible(.self)
 })
 
 Signal.gen$methods(unblock = function() {
-  blocked <<- FALSE
+  .blocked <<- FALSE
   invisible(.self)
 })
 
 Signal.gen$methods(buffer = function() {
-  buffered <<- TRUE
-  .self$accumulator <- accumulator
+  .buffered <<- TRUE
   invisible(.self)
 })
 
 Signal.gen$methods(flush = function() {
-  if (length(formals(accumulator)) == 1L)
-    queue <<- list(accumulator(queue))
-  buffered <<- FALSE
-  accumulator <<- function() NULL
-  lapply(queue, do.call, what = emit)
-  queue <<- list()
+  if (length(formals(.accumulator)) == 1L)
+    .queue <<- list(.accumulator(.queue))
+  .buffered <<- FALSE
+  .accumulator <<- function() NULL
+  lapply(.queue, do.call, what = emit)
+  .queue <<- list()
   invisible(.self)
 })
 
 ## Allows C++-style initializer chaining
 Signal.gen$methods(accumulator = function(value) {
   if (missing(value))
-    accumulator
+    .accumulator
   else {
-    accumulator <<- value
+    .accumulator <<- value
     invisible(.self)
   }
 })
 
 setMethod("show", "Signal", function(object) {
   cat(deparse(as.call(c(as.name(class(object)), formals(object$emit)))), "with",
-      length(object$listeners), "listeners\n")
+      length(object$.listeners), "listeners\n")
 })
