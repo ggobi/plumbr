@@ -29,12 +29,12 @@
 
 ## tests:
 
-Signal(x, y)
+## Signal(x, y)
 
-signal <- Signal(x, y, z = NA)
-signal$connect(function(n, x, option = "none") message("x:", x))
-signal$connect(function(z, ...) message("z:", z, " x:", list(...)$x))
-signal$emit(0, 1)
+## signal <- Signal(x, y, z = NA)
+## signal$connect(function(n, x, option = "none") message("x:", x))
+## signal$connect(function(z, ...) message("z:", z, " x:", list(...)$x))
+## signal$emit(0, 1)
 
 ## id <- signal$connect(function(x, y, option = "none")
 ##                      message("y:", y, " op:", option),
