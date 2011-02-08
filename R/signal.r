@@ -64,8 +64,6 @@
 ## signal$emit(0); signal$emit(1); signal$emit(3)
 ## signal$flush()
 
-## FIXME: should a signal have a name?
-
 Signal.gen <- setRefClass("Signal",
                           fields = list(listeners = "list", emit = "function",
                             idCounter = "integer", blocked = "logical",
@@ -74,7 +72,8 @@ Signal.gen <- setRefClass("Signal",
 
 Signal <- function(...) {
   call <- sys.call()[-1L]
-  hasDefault <- if (is.null(names(call)))
+  hasDefault <-
+    if (is.null(names(call)))
       rep(FALSE, length(call))
     else nzchar(names(call))
   names(call)[!hasDefault] <- sapply(call[!hasDefault], deparse)
