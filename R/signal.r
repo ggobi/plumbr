@@ -91,7 +91,7 @@ Signal <- function(...) {
     if (.blocked)
       return(invisible())
     if (.buffered) {
-      event <- lapply(match.call()[-1], eval)
+      event <- lapply(match.call()[-1], eval, environment())
       if (length(formals(.accumulator)) == 2L && length(.queue))
         .queue[[1]] <<- .accumulator(.queue[[1]], event)
       else .queue <<- c(.queue, list(event))
