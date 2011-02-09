@@ -91,7 +91,7 @@ mutaframe <- function(..., row.names = NULL) {
   structure(mf,
     col.names = names(varlist), # keep variable order
     row.names = row.names,
-    listeners = list(),
+    changed = Signal(i, j)$accumulator(combine_data_events),
     class = c("mutaframe", class(mf))
   )
 }

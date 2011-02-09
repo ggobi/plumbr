@@ -9,7 +9,7 @@
 #' @param callback function with arguments i and j
 #' @export
 add_listener <- function(mf, callback) {
-  attr(mf, "listeners") <- append(listeners(mf), callback)
+  changed(mf)$connect(callback)
 }
 
 #' Is the event a shape changed event?
@@ -35,20 +35,15 @@ combine_data_events <- function(events) {
     stringsAsFactors = FALSE)))
 }
 
-#' List mutaframe listeners.
-listeners <- function(mf) {
-  attr(mf, "listeners")
+#' Get the 'changed' signal
+changed <- function(mf) {
+  attr(mf, "changed")
 }
 
 #' Notify listeners that data has changed.
+#' @export
 notify_listeners <- function(mf, i, j) {
-  if (is_paused(mf)) {
-    attr(mf, "events") <- append(attr(mf, "events"), list(list(i = i, j = j)))
-  } else {
-    for(listener in listeners(mf)) {
-      listener(i, j)
-    }    
-  }
+  changed(mf)$emit(i, j)
 }
 
 #' Pause (cache) events.
@@ -63,8 +58,7 @@ notify_listeners <- function(mf, i, j) {
 #' @param mf mutaframe
 #' @export
 pause <- function(mf) {
-  attr(mf, "paused") <- TRUE
-  attr(mf, "events") <- list()
+  changed(mf)$buffer()
 }
 
 #' Unpause (reply) events.
@@ -72,14 +66,8 @@ pause <- function(mf) {
 #' @param mf mutaframe
 #' @export
 unpause <- function(mf) {
-  events <- attr(mf, "events")
-
-  attr(mf, "paused") <- FALSE
-  attr(mf, "events") <- NULL
-
-  all <- combine_data_events(events)  
-  notify_listeners(mf, all$i, all$j)
+  changed(mf)$flush()
 }
 
 #' Is a mutaframe currently paused?
-is_paused <- function(x) attr(x, "paused") %||% FALSE
+is_paused <- function(x) changed(mf)$paused
