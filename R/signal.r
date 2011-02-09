@@ -16,7 +16,7 @@
 ## though.
 
 ## Arguments passed to emit() are passed to handlers, with some caveats:
-## - Arguments are named in call to handler.
+## - If namedArgs=TRUE, arguments are named in call to handler.
 ## - If a handler is missing a signal argument, the argument is
 ##   dropped when calling the handler. The handler is just not interested.
 ## - A handler may have arguments not in the signal signature.
@@ -32,20 +32,28 @@
 ## Signal(x, y)
 
 ## signal <- Signal(x, y, z = NA)
-## signal$connect(function(n, x, option = "none") message("x:", x))
-## signal$connect(function(z, ...) message("z:", z, " x:", list(...)$x))
+## signal$connect(function(n, x, option = "none") message("x:", x),
+##                namedArgs = TRUE)
+## signal$connect(function(z, ...) message("z:", z, " x:", list(...)$x),
+##                namedArgs = TRUE)
 ## signal$emit(0, 1)
 
+## signal$connect(function(x, y, option = "none")
+##                message("y:", y, " op:", option), TRUE)
+## signal$connect(function(x, y, option = "none")
+##                message("op:", option), option = "test")
+## signal$connect(function(x, y, option = "none")
+##                message("op:", option), FALSE, "test")
 ## id <- signal$connect(function(x, y, option = "none")
-##                      message("y:", y, " op:", option),
-##                      option = "test")
+##                      message("op:", option), TRUE, "test")
+
 ## signal$emit(0, 1)
 
 ## signal$disconnect(id)
 ## signal$emit(0, 2)
 
 ## signal <- Signal(x)
-## signal$connect(function(x) print(x))
+## signal$connect(function(i) print(i))
 
 ## signal$block()
 ## signal$emit(0)
@@ -96,7 +104,7 @@ Signal <- function(...) {
   signal
 }
 
-Signal.gen$methods(connect = function(FUN, ...) {
+Signal.gen$methods(connect = function(FUN, namedArgs = FALSE, ...) {
   ## FUN is a function
   extraArgs <- list(...)
   if (length(extraArgs) > length(formals(FUN)))
@@ -105,13 +113,14 @@ Signal.gen$methods(connect = function(FUN, ...) {
   ## the wrapper adds the extra args, and also uses '...' to drop unwanted args
   wrapperFormals <- formals(FUN)
   handlerArgs <- sapply(names(wrapperFormals), as.name)
-  handlerArgs[names(extraArgs)] <- extraArgs
   if (!("..." %in% names(wrapperFormals)))
     wrapperFormals <- c(wrapperFormals, alist(...=))
   wrapper <- as.function(c(wrapperFormals, as.call(c(FUN, handlerArgs))))
   .idCounter <<- .idCounter + 1L
   id <- as.character(.idCounter)
-  .listeners[[id]] <<- as.call(c(list(wrapper), args))
+  if (!namedArgs)
+    names(args) <- NULL
+  .listeners[[id]] <<- as.call(c(list(wrapper), c(args, extraArgs)))
   invisible(id)
 })
 
