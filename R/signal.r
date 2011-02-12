@@ -168,3 +168,44 @@ setMethod("show", "Signal", function(object) {
   cat(deparse(as.call(c(as.name(class(object)), formals(object$emit)))), "with",
       length(object$.listeners), "listeners\n")
 })
+
+
+##' Convenience function for defining a reference class field that
+##' signals when set. 
+##'
+##' @title Signaling Fields
+##' @param name Name of the field
+##' @param class Class name of the field
+##' @param signalName Name of the signal
+##' @return A list that is easily concatenated into the field list
+##' @author Michael Lawrence
+##' @examples Brush.gen <- setRefClass("Brush",
+##' fields = signalingField("color", "character"))
+##' @examples brush <- Brush.gen$new(color = "blue")
+##' @examples brush$colorChanged$connect(function() print(brush$color))
+##' @examples brush$color <- "red"
+signalingField <- function(name, class,
+                           signalName = paste(name, "Changed", sep = ""))
+{
+  .name <- paste(".", name, sep = "")
+  body <- substitute({
+    if (missing(val))
+      .name
+    else {
+      if (!is(val, .class))
+        stop("Cannot set an object of type '", class(val), "' on '", name,
+             "', a field of type '", .class, "'")
+      changed <- !identical(.name, val)
+      .name <<- val
+      if (changed) {
+        if (is.null(body(signal$emit)))
+          signal <<- Signal() # lazy construction of signal
+        signal$emit()
+      }
+    }
+  }, list(.name = as.name(.name), name = name, signal = as.name(signalName),
+          .class = class))
+  structure(list(as.function(c(alist(val=), body)), class, "Signal"),
+            names = c(name, .name, signalName))
+}
+
