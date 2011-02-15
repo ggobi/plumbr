@@ -1,5 +1,5 @@
 
-#' @S3method name mutaframe
+#' @S3method names mutaframe
 names.mutaframe <- function(x, ...) attr(x, "col.names")
 
 #' @S3method dimnames mutaframe
