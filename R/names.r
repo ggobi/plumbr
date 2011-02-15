@@ -7,13 +7,13 @@ dimnames.mutaframe <- function(x, ...) {
   list(attr(x, "row.names"), attr(x, "col.names"))
 }
 
-#' @S3method names<- mutaframe
+#' @S3method "names<-" mutaframe
 `names<-.mutaframe` <- function(x, value, ...) {
   attr(x, "col.names") <- value
   x
 }
 
-#' @S3method dimnames <- mutaframe
+#' @S3method "dimnames<-" mutaframe
 `dimnames<-.mutaframe` <- function(x, value, ...) {
   attr(x, "row.names") <- value[[1]]
   attr(x, "col.names") <- value[[2]]
