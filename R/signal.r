@@ -181,9 +181,9 @@ setMethod("show", "Signal", function(object) {
 ##' @author Michael Lawrence
 ##' @examples Brush.gen <- setRefClass("Brush",
 ##' fields = signalingField("color", "character"))
-##' @examples brush <- Brush.gen$new(color = "blue")
-##' @examples brush$colorChanged$connect(function() print(brush$color))
-##' @examples brush$color <- "red"
+##' brush <- Brush.gen$new(color = "blue")
+##' brush$colorChanged$connect(function() print(brush$color))
+##' brush$color <- "red"
 signalingField <- function(name, class,
                            signalName = paste(name, "Changed", sep = ""))
 {
