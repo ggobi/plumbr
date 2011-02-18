@@ -37,7 +37,8 @@ S3method(as.list, mutalist)
 export(mutaframe, mutalist)
 
 ## events
-export(add_listener, shape_changed, notify_listeners, pause, unpause, is_paused)
+export(add_listener, shape_changed, notify_listeners, pause, unpause, is_paused,
+       remove_listener)
 
 ## signals
 export(Signal)

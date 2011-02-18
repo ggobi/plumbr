@@ -12,6 +12,17 @@ add_listener <- function(mf, callback) {
   changed(mf)$connect(callback)
 }
 
+##' Remove a listener, identified by the ID returned by
+##' \code{\link{add_listener}}. 
+##'
+##' @param mf mutaframe
+##' @param id value returned by \code{add_listener} when originally
+##' connecting the handler
+##' @export
+remove_listener <- function(mf, id) {
+  changed(mf)$disconnect(id)
+}
+
 #' Is the event a shape changed event?
 #' 
 #' @param i col index
