@@ -43,6 +43,12 @@ export(add_listener, shape_changed, notify_listeners, pause, unpause, is_paused)
 export(Signal)
 exportClasses("Signal")
 
+## linking
+exportClasses("Selection", "ItemSelection", "RegionSelection")
+export(ItemSelection, RegionSelection, DataSelection)
+exportMethods(as.integer, as.numeric, as.logical, as.factor, as.matrix, which)
+export(duplex_data_linker, match_any_linker)
+
 ## utilities
 S3method(c, mutalist)
 S3method(lapply, mutalist)
