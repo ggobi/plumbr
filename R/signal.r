@@ -95,11 +95,11 @@ Signal <- function(...) {
       if (length(formals(.accumulator)) == 2L && length(.queue))
         .queue[[1]] <<- .accumulator(.queue[[1]], event)
       else .queue <<- c(.queue, list(event))
-    } else { 
+    } else {
       for (listener in .listeners)
         eval(listener)
     }
-    invisible()    
+    invisible()
   })), signal@.xData) # is getting .xData bad practice?
   signal
 }
@@ -171,7 +171,7 @@ setMethod("show", "Signal", function(object) {
 
 
 ##' Convenience function for defining a reference class field that
-##' signals when set. 
+##' signals when set.
 ##'
 ##' @title Signaling Fields
 ##' @param name Name of the field
@@ -181,9 +181,9 @@ setMethod("show", "Signal", function(object) {
 ##' @author Michael Lawrence
 ##' @examples Brush.gen <- setRefClass("Brush",
 ##' fields = signalingField("color", "character"))
-##' @examples brush <- Brush.gen$new(color = "blue")
-##' @examples brush$colorChanged$connect(function() print(brush$color))
-##' @examples brush$color <- "red"
+##' brush <- Brush.gen$new(color = "blue")
+##' brush$colorChanged$connect(function() print(brush$color))
+##' brush$color <- "red"
 signalingField <- function(name, class,
                            signalName = paste(name, "Changed", sep = ""))
 {
