@@ -1,3 +1,5 @@
+## imports
+importFrom(utils, head, tail)
 
 ## mutaframe data.frame style accessors
 S3method("$", mutaframe)
