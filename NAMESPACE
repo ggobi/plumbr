@@ -45,7 +45,7 @@ export(add_listener, shape_changed, notify_listeners, pause, unpause, is_paused,
 ## signals
 export(Signal)
 exportClasses("Signal")
-export(signalingField)
+export(signalingField, declareSignal)
 
 ## linking
 exportClasses("Selection", "ItemSelection", "RegionSelection")
