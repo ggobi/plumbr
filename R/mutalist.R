@@ -227,6 +227,10 @@ as.list.mutalist <- function(x, use.names = TRUE) {
   l
 }
 
+as.data.frame.mutalist <- function(x,...){
+    as.data.frame(as.list(x))
+}
+
 unlist.mutalist <- function(x, recursive = TRUE, use.names = TRUE) {
   unlist(as.list(x), recursive, use.names)
 }
