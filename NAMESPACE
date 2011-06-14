@@ -1,5 +1,7 @@
 ## imports
 importFrom(utils, head, tail)
+importFrom(signal, signalingField, Signal)
+importClassesFrom(signal, Signal)
 
 ## mutaframe data.frame style accessors
 S3method("$", mutaframe)
@@ -43,10 +45,6 @@ export(mutaframe, mutalist)
 export(add_listener, shape_changed, notify_listeners, pause, unpause, is_paused,
        remove_listener)
 
-## signals
-export(Signal)
-exportClasses("Signal")
-export(signalingField, declareSignal)
 
 ## linking
 exportClasses("Selection", "ItemSelection", "RegionSelection")
