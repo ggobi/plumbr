@@ -1,7 +1,7 @@
 ## imports
 importFrom(utils, head, tail)
-importFrom(signal, signalingField, Signal)
-importClassesFrom(signal, Signal)
+importFrom(objectSignals, signalingField, Signal)
+importClassesFrom(objectSignals, Signal)
 
 ## mutaframe data.frame style accessors
 S3method("$", mutaframe)
