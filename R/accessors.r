@@ -23,7 +23,7 @@
 ##' @param j The column indices
 ##' @param ... Arguments passed to methods
 ##' @return The selected column
-##' @rdname accessors 
+##' @rdname accessors
 "[[.mutaframe" <- function(x, i, j, ...) {
   dotArgs <- list(...)
   if (length(dotArgs) > 0)
@@ -48,7 +48,7 @@
 }
 
 ##' @param value The replacement column
-##' @rdname accessors 
+##' @rdname accessors
 "$<-.mutaframe" <- function(x, name, value) {
   if (is.null(value)) {
     # Remove column
@@ -87,7 +87,7 @@
       i <- paste("V", i, sep = "")
     else i <- names(x)[i]
   }
-  
+
   if (!exists(i, x)) {
     # Add new column
     nms <- make.names(c(names(x), i), unique = TRUE)
@@ -98,7 +98,7 @@
     makeActiveBinding(i, value, x)
     notify_listeners(x, NULL, NULL)
   } else assign(i, value, x)
-  
+
   x
 }
 
@@ -107,14 +107,14 @@
 ##' result. By default, this is \code{TRUE} if the result has one
 ##' column.
 ##' @return A dynamic, filtering mutaframe
-##' @rdname accessors 
+##' @rdname accessors
 "[.mutaframe" <- function(x, i, j, ..., drop) {
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
-  
+
   # Single item subsetting: e.g. mtcars[], mtcars[1], mtcars["mpg"]
   # NOTE: matrix-style subsetting by logical matrix not supported
-  if ((nargs() - !missing(drop)) < 3) { 
+  if ((nargs() - !missing(drop)) < 3) {
     if (!missing(drop))
       warning("parameter 'drop' ignored by list-style subsetting")
     if (missing(i))
@@ -122,13 +122,13 @@
     iInfo <- .bracket.Index(i, ncol(x), colnames(x))
     if (!is.null(iInfo$msg))
       stop("subsetting as list: ", iInfo$msg)
-    
+
     return(filter_proxy(x, j = iInfo$idx, rn = rownames(x)))
   }
 
   ### NOTE: the indexing into columns is static, so negative column
   ### indices will not propagate new columns
-    
+
   dim <- dim(x)
   rn <- rownames(x)
   if (!missing(j)) {
@@ -138,13 +138,13 @@
     j <- jInfo$idx
     dim[2L] <- length(j)
   } else j <- names(x)
-  
+
   if (!missing(i)) {
     iInfo <- .bracket.Index(i, nrow(x), rownames(x), dup.nms = TRUE,
                             allowNumeric = TRUE)
     if (!is.null(iInfo$msg))
       stop("selecting rows: ", iInfo$msg)
-    i <- iInfo$idx  
+    i <- iInfo$idx
     dim[1L] <- length(seq(dim[1L])[i]) # may have 0 cols, no rownames
     rn <- rn[i]
     if (anyDuplicated(rn))
@@ -153,10 +153,10 @@
     i <- TRUE
   }
 
-  
+
   if (missing(drop)) ## drop by default if only one column left
     drop <- length(dim[2L]) == 1
-    
+
   if (dim[2L] == 1 && drop) {
     # Single column output, and want to drop, so return static clone
     x[[j]][i]
@@ -166,8 +166,8 @@
   }
 }
 
-##' @rdname accessors 
-"[<-.mutaframe" <- function(x, i, j, ..., value) {  
+##' @rdname accessors
+"[<-.mutaframe" <- function(x, i, j, ..., value) {
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
 
@@ -202,7 +202,7 @@
   i <- iInfo$idx
   j <- jInfo$idx
 
-  useI <- iInfo$useIdx  
+  useI <- iInfo$useIdx
   if (useI) {
     li <- length(i)
   } else {
@@ -228,7 +228,7 @@
         value <- value[rep(seq_len(nrv), length.out = li), , drop = FALSE]
     }
   }
-  
+
   if (useI) {
     for (ji in j) {
       x[[ji]][i] <- value
@@ -238,7 +238,7 @@
       x[[ji]] <- value
     }
   }
-  
+
   x
 }
 
@@ -297,7 +297,7 @@ anyMissingOrOutside <- function(x, lower = -.Machine$integer.max,               
       } else idx <- nms[idx]
     }
   }
-  
+
   list(msg = msg, useIdx = useIdx, idx = idx)
 }
 
