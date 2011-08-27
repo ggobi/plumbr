@@ -17,6 +17,8 @@ S3method("names<-", mutaframe)
 S3method(names, mutaframe)
 S3method("dimnames<-", mutaframe)
 S3method(dimnames, mutaframe)
+S3method(head, mutaframe)
+S3method(tail, mutaframe)
 
 ## mutalist list style accessors
 S3method("names<-", mutalist)

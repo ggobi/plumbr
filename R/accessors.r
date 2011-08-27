@@ -301,6 +301,11 @@ anyMissingOrOutside <- function(x, lower = -.Machine$integer.max,               
   list(msg = msg, useIdx = useIdx, idx = idx)
 }
 
+##' @S3method head mutaframe
 head.mutaframe <- function(x, n = 6) {
   x[seq(n),,drop=FALSE]
+}
+##' @S3method tail mutaframe
+tail.mutaframe <- function(x, n = 6) {
+  x[seq(to = nrow(x), length.out = n),,drop=FALSE]
 }
