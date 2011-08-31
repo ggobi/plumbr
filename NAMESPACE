@@ -65,3 +65,6 @@ export(mutalist2env)
 ## printing
 S3method(print, mutaframe)
 S3method(print, mutalist)
+
+## S4 compatability
+exportClasses(mutalist, mutaframe)
