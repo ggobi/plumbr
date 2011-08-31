@@ -2,16 +2,34 @@ Package: plumbr
 Version: 0.6.3
 Title: Mutable and dynamic data models
 Author: Michael Lawrence, Hadley Wickham
-Depends: R (>= 2.10.0), utils
-Imports: utils, objectSignals
+Depends:
+    R (>= 2.10.0),
+    utils
+Imports:
+    utils,
+    objectSignals
 URL: http://plumbr.r-forge.r-project.org
 Maintainer: Michael Lawrence <michafla@gene.com>
-Description: The base R data.frame, like any vector, is copied upon
-  modification. This behavior is at odds with that of GUIs and interactive
-  graphics. To rectify this, plumbr provides a mutable, dynamic tabular
-  data model. Models may be chained together to form the complex
-  plumbing necessary for sophisticated graphical interfaces.
+Description: The base R data.frame, like any vector, is
+    copied upon modification. This behavior is at odds with
+    that of GUIs and interactive graphics. To rectify this,
+    plumbr provides a mutable, dynamic tabular data model.
+    Models may be chained together to form the complex
+    plumbing necessary for sophisticated graphical
+    interfaces.
 License: GPL (>= 2)
-Collate: accessors.r bindings.r coercion.r constructor.r dimensions.r
-         events.r linking.r mutalist.R names.r print.r proxy-filter.r
-         selection.r utils.r
+Collate:
+    'accessors.r'
+    'bindings.r'
+    'coercion.r'
+    'constructor.r'
+    'dimensions.r'
+    'events.r'
+    'linking.r'
+    'mutalist.R'
+    'names.r'
+    'print.r'
+    'proxy-filter.r'
+    'selection.r'
+    'utils.r'
+    's4.r'
