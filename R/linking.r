@@ -11,13 +11,32 @@ if (FALSE) { # please ignore my bad programming habits
   ## Now, link that selection to other cases in same dataset by some variable
   linked_sel <- sel$link(match_any_linker(Cars93["Manufacturer"]))
   ## Finally, scale that linked selection to the data
-  linked_sel$scale(function(x, d) d[as.logical(x), ".color"] <- "red", mf)
+  linked_sel$scale(function(x, d) {
+    d[as.logical(x), ".color"] <- "red"
+  }, mf)
   ## To test, select some cases
-  cases <- rep(FALSE, nrow(Cars93))
+  cases <- rep(FALSE, nrow(mf))
   cases[seq(1, 10, 2)] <- TRUE
   sel$replace(cases)
 }
 
+##' A utility for creating linking functions that operate in both
+##' directions (full duplex).
+##'
+##' The generated linker function takes two arguments:
+##' \code{from_selection} and \code{new_selection}. If
+##' \code{new_selection} is specified, \code{new_selection} is mapped
+##' from \code{to_data} to \code{from_data}. Otherwise,
+##' \code{from_selection} is mapped from \code{from_data} to
+##' \code{to_data}.
+##' 
+##' @title Duplex linking
+##' @param delegate The linking function that performs the mapping,
+##' such as \code{\link{match_any_linker}}.
+##' @param from_data A \code{data.frame} of keys
+##' @param to_data A \code{data.frame} of keys
+##' @return A two-way linking function as described in the details.
+##' @author Michael Lawrence
 duplex_data_linker <- function(delegate, from_data, to_data = from_data) {
   function(from_selection, new_selection) {
     if (!missing(new_selection))
@@ -32,6 +51,26 @@ generate_key <- function(data) {
   else do.call(paste, c(as.list(data), sep = "\r"))
 }
 
+##' Linking functions return a logical vector, with the \code{TRUE}
+##' elements indicating rows in the data that are linked. 
+##'
+##' The \code{match_any_linker} function links rows in
+##' \code{from_data} to rows in \code{to_data} that share the same
+##' key.
+##'
+##' By convention, a key is defined as the combination of the values
+##' in every column of \code{from_data} and \code{to_data}. Thus,
+##' \code{from_data} and \code{to_data} should contain only the
+##' columns necessary for key generation. They should not be an
+##' entire dataset. 
+##' 
+##' @title 
+##' @param from_data A \code{data.frame}-like object containing the
+##' keys for linking the corresponding rows to rows in \code{to_data}
+##' @param to_data A \code{data.frame}-like object containing the keys
+##' that will be matched against the keys in \code{from_data}
+##' @return a logical vector, indicating which \code{from_data} rows are linked
+##' @author Michael Lawrence
 match_any_linker <- function(from_data, to_data = from_data)
 {
   duplex_data_linker(function(from_selection, from_data, to_data) {

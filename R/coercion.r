@@ -1,4 +1,15 @@
+##' Coerce an object to a mutaframe. Supported types include
+##' \code{data.frame}, or anything coercible to one.
+##'
+##' @title Coercion to mutaframe
+##' @param x the object to coerce
+##' @param ... arguments passed to methods
+##' @return a mutaframe
+##' @rdname as.mutaframe
 as.mutaframe <- function(x, ...) UseMethod("as.mutaframe")
+
+##' @rdname as.mutaframe
+##' @S3method as.mutaframe mutaframe
 as.mutaframe.mutaframe <- function(x) {
   cl <- oldClass(x)
   i <- match("mutaframe", cl)
@@ -6,10 +17,28 @@ as.mutaframe.mutaframe <- function(x) {
     class(x) <- cl[-(1L:(i - 1L))]
   x
 }
+
+##' @rdname as.mutaframe
+##' @S3method as.mutaframe data.frame
 as.mutaframe.data.frame <- function(x) .mutaframe(x, rownames(x))
+
+##' @rdname as.mutaframe
+##' @S3method as.mutaframe default
 as.mutaframe.default <- function(x, ...) as.mutaframe(as.data.frame(x, ...))
 
-as.data.frame.mutaframe <- function(x, row.names=rownames(x), optional=FALSE, ...) {
+##' Coerces a mutaframe to a \code{data.frame}
+##'
+##' @title Coercion to data.frame
+##' @param x a mutaframe
+##' @param row.names character vector of rownames, defaults to
+##' rownames of \code{x}
+##' @param optional see \code{\link{as.data.frame}}
+##' @param ... see \code{\link{as.data.frame}}
+##' @return a \code{data.frame}
+##' @S3method as.data.frame mutaframe
+as.data.frame.mutaframe <- function(x, row.names = rownames(x),
+                                    optional = FALSE, ...)
+{
   cols <- lapply(names(x), function(j) x[[j]])
   names(cols) <- names(x)
   df <- as.data.frame(cols, optional = optional, ...)
@@ -19,7 +48,19 @@ as.data.frame.mutaframe <- function(x, row.names=rownames(x), optional=FALSE, ..
   df
 }
 
+##' Tests whether an object is a \code{mutaframe}
+##'
+##' @title Test for mutaframes
+##' @param x an object to check
+##' @return \code{TRUE} if \code{x} is an instance of a class that
+##' inherits from \code{mutaframe}; otherwise, \code{FALSE}
 is.mutaframe <- function(x) inherits(x, "mutaframe")
 
-## as.list.environment does not resolve active bindings
+##' Coerces a mutaframe to a list
+##'
+##' @title Coercion to list
+##' @param x a mutaframe
+##' @return a list, with one element for each mutaframe column
+##' @S3method as.list mutaframe
 as.list.mutaframe <- function(x) lapply(x, do.call, list())
+## as.list.environment does not resolve active bindings

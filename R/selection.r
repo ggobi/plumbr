@@ -91,6 +91,25 @@ Selection.gen$methods(scale = function(scaler, data) {
 ItemSelection.gen <- setRefClass("ItemSelection", contains = "Selection")
 RegionSelection.gen <- setRefClass("RegionSelection", contains = "Selection")
 
+##' Data model for storing the selection of a set of items or a region
+##' in space. Clients can register handlers for selection changes. One
+##' can create proxy models to transform selections and link across
+##' datasets. \strong{This design is preliminary and subject to change.}
+##'
+##' There are two types of selection defined by plumbr:
+##' \code{ItemSelection} and \code{RegionSelection}. These are both
+##' reference classes that inherit from \code{Selection}. 
+##' @title Selection
+##' @param delegate An object to which the model delegates for
+##' obtaining the selection status. This can be either a logical
+##' vector (\code{TRUE} where selected) or a function with one
+##' argument. If the function is called with no arguments, it should
+##' return the selection. Otherwise, the argument is  the new
+##' selection status, and the function should store it. This is the
+##' same semantic as \link[=makeActiveBinding]{active bindings}.
+##' @return An instance of either \code{ItemSelection} or
+##' \code{RegionSelection}. 
+##' @author Michael Lawrence
 ItemSelection <- function(delegate = NULL) {
   ItemSelection.gen$new(.selection = delegate, changed = Signal())
 }

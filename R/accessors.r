@@ -15,6 +15,7 @@
 ##' @param name Name of the column to extract
 ##' @return The selected column
 ##' @rdname accessors
+##' @S3method $ mutaframe
 "$.mutaframe" <- function(x, name) {
   x[[name, exact=FALSE]]
 }
@@ -24,6 +25,7 @@
 ##' @param ... Arguments passed to methods
 ##' @return The selected column
 ##' @rdname accessors
+##' @S3method [[ mutaframe
 "[[.mutaframe" <- function(x, i, j, ...) {
   dotArgs <- list(...)
   if (length(dotArgs) > 0)
@@ -49,6 +51,7 @@
 
 ##' @param value The replacement column
 ##' @rdname accessors
+##' @S3method $<- mutaframe
 "$<-.mutaframe" <- function(x, name, value) {
   if (is.null(value)) {
     # Remove column
@@ -62,6 +65,7 @@
 }
 
 ##' @rdname accessors
+##' @S3method [[<- mutaframe
 "[[<-.mutaframe" <- function(x, i, j,..., value) {
   nrx <- nrow(x)
   lv <- length(value)
@@ -108,6 +112,7 @@
 ##' column.
 ##' @return A dynamic, filtering mutaframe
 ##' @rdname accessors
+##' @S3method [ mutaframe
 "[.mutaframe" <- function(x, i, j, ..., drop) {
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
@@ -167,7 +172,8 @@
 }
 
 ##' @rdname accessors
-"[<-.mutaframe" <- function(x, i, j, ..., value) {
+##' @S3method [<- mutaframe
+"[<-.mutaframe" <- function(x, i, j, ..., value) {  
   if (length(list(...)) > 0)
     warning("parameters in '...' not supported")
 

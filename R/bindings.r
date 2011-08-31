@@ -3,6 +3,7 @@
 #' @param x mutaframe to inherit from
 #' @param j columns to generate bindings for
 proxy_bindings <- function(mf, j = names(mf)) {
+  force(mf)
   binder <- function(sym) {
     function(v) {
       if (missing(v)) {

@@ -1,5 +1,8 @@
-#' Create a mutaframe, a mutable data.frame
-#' @export
+##' Create a mutaframe, a mutable data.frame
+##' @export
+##' @param ... Objects to coerce to a mutaframe and combine column-wise
+##' @param row.names optional, the character vector of row names
+##' @return a mutaframe
 mutaframe <- function(..., row.names = NULL) {
   listData <- list(...)
 
@@ -18,15 +21,22 @@ mutaframe <- function(..., row.names = NULL) {
   nrows <- ncols <- integer(length(varnames))
   for (i in seq_along(listData)) {
     element <- listData[[i]]
+
+    if (is.function(element)) {
+      element <- element()
+    }
     if (!is.mutaframe(element)) {
       element <- as.data.frame(element)
     }
-
+    
     nrows[i] <- nrow(element)
     ncols[i] <- ncol(element)
+    
     varlist[[i]] <-
       if (is.environment(listData[[i]]))
         proxy_bindings(element, names(element))
+      else if (is.function(listData[[i]]))
+        listData[[i]]
       else as.list(element)
     if ((length(dim(listData[[i]])) > 1) ||
         (ncol(element) > 1)) {
@@ -73,8 +83,8 @@ mutaframe <- function(..., row.names = NULL) {
   env
 }
 
-#' Raw constructor.
-#' Constructs a mutaframe from a list of variables/bindings.
+##' Raw constructor.
+##' Constructs a mutaframe from a list of variables/bindings.
 .mutaframe <- function(varlist = list(), row.names = NULL) {
   mf <- new.env(parent = emptyenv())
   
