@@ -62,9 +62,8 @@ generate_key <- function(data) {
 ##' in every column of \code{from_data} and \code{to_data}. Thus,
 ##' \code{from_data} and \code{to_data} should contain only the
 ##' columns necessary for key generation. They should not be an
-##' entire dataset. 
-##' 
-##' @title 
+##' entire dataset.
+##'
 ##' @param from_data A \code{data.frame}-like object containing the
 ##' keys for linking the corresponding rows to rows in \code{to_data}
 ##' @param to_data A \code{data.frame}-like object containing the keys
