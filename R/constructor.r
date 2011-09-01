@@ -3,6 +3,7 @@
 ##' @param ... Objects to coerce to a mutaframe and combine column-wise
 ##' @param row.names optional, the character vector of row names
 ##' @return a mutaframe
+##' @exportClass mutaframe
 mutaframe <- function(..., row.names = NULL) {
   listData <- list(...)
 

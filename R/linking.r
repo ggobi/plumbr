@@ -17,6 +17,7 @@
 ##' @param to_data A \code{data.frame} of keys
 ##' @return A two-way linking function as described in the details.
 ##' @author Michael Lawrence
+##' @export
 duplex_data_linker <- function(delegate, from_data, to_data = from_data) {
   function(from_selection, new_selection) {
     if (!missing(new_selection))
@@ -51,6 +52,7 @@ generate_key <- function(data) {
 ##' that will be matched against the keys in \code{from_data}
 ##' @return a logical vector, indicating which \code{from_data} rows are linked
 ##' @author Michael Lawrence
+##' @export
 match_any_linker <- function(from_data, to_data = from_data)
 {
   duplex_data_linker(function(from_selection, from_data, to_data) {

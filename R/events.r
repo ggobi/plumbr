@@ -81,4 +81,5 @@ unpause <- function(mf) {
 }
 
 #' Is a mutaframe currently paused?
+#' @export
 is_paused <- function(x) changed(mf)$paused

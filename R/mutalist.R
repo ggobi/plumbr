@@ -21,6 +21,8 @@
 ##' @return a new mutalist
 ##' @author Michael Lawrence
 ##' @rdname mutalist
+##' @export
+##' @exportClass mutalist
 mutalist <- function(...) {
   ml <- new.env(parent = emptyenv())
   class(ml) <- c("mutalist", class(ml))
@@ -293,6 +295,7 @@ unlist.mutalist <- function(x, recursive = TRUE, use.names = TRUE) {
 ##' @param parent parent for new environment, if created
 ##' @param hash whether to hash the new environment
 ##' @param size initial size of hash table
+##' @export
 mutalist2env <- function(x, envir = new.env(hash, parent, size),
                          parent = parent.frame(), hash = FALSE, size = 29L)
 {

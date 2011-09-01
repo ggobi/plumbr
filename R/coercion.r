@@ -6,6 +6,7 @@
 ##' @param ... arguments passed to methods
 ##' @return a mutaframe
 ##' @rdname as.mutaframe
+##' @export
 as.mutaframe <- function(x, ...) UseMethod("as.mutaframe")
 
 ##' @rdname as.mutaframe
@@ -54,6 +55,7 @@ as.data.frame.mutaframe <- function(x, row.names = rownames(x),
 ##' @param x an object to check
 ##' @return \code{TRUE} if \code{x} is an instance of a class that
 ##' inherits from \code{mutaframe}; otherwise, \code{FALSE}
+##' @export
 is.mutaframe <- function(x) inherits(x, "mutaframe")
 
 ##' Coerces a mutaframe to a list

@@ -102,6 +102,8 @@ RegionSelection.gen <- setRefClass("RegionSelection", contains = "Selection")
 ##' selection status, and the function should store it. This is the
 ##' same semantic as \link[=makeActiveBinding]{active bindings}.
 ##' @noRd
+##' @exportClass Selection, ItemSelection, RegionSelection
+##' @export ItemSelection RegionSelection DataSelection
 ItemSelection <- function(delegate = NULL) {
   ItemSelection.gen$new(.selection = delegate, changed = Signal())
 }
@@ -109,6 +111,7 @@ RegionSelection <- function(delegate = NULL) {
   RegionSelection.gen$new(.selection = delegate, changed = Signal())
 }
 
+##' @exportMethod as.integer, as.numeric, as.logical, as.factor, as.matrix, which
 setAs("ItemSelection", "vector", function(from) as.vector(x))
 setMethod("as.vector", "ItemSelection", function(x) as.vector(x$selection))
 
