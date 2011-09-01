@@ -1,6 +1,6 @@
 #' Generate binding for proxies.
 #'
-#' @param x mutaframe to inherit from
+#' @param mf mutaframe to inherit from
 #' @param j columns to generate bindings for
 proxy_bindings <- function(mf, j = names(mf)) {
   force(mf)
@@ -46,6 +46,8 @@ filter_bindings <- function(mf, j = names(mf), i) {
 
 ##' Generate binding for raw values
 ##' 
+##' @param mf mutaframe
+##' @param name name
 ##' @param data vector to store
 ##' @return named list of binding functions
 raw_binding <- function(mf, name, data) {
@@ -64,6 +66,7 @@ raw_binding <- function(mf, name, data) {
 
 ##' Generate binding for raw values
 ##' 
+##' @param mf mutaframe
 ##' @param data list of values
 ##' @return named list of binding functions
 raw_bindings <- function(mf, data) {

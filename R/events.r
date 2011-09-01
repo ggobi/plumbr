@@ -47,11 +47,14 @@ combine_data_events <- function(events) {
 }
 
 #' Get the 'changed' signal
+#' @param mf a mutaframe
 changed <- function(mf) {
   attr(mf, "changed")
 }
 
 #' Notify listeners that data has changed.
+#' @param mf mutaframe
+#' @param i,j row and column indices
 #' @export
 notify_listeners <- function(mf, i, j) {
   changed(mf)$emit(i, j)
@@ -81,5 +84,6 @@ unpause <- function(mf) {
 }
 
 #' Is a mutaframe currently paused?
+#' @param mf a mutaframe
 #' @export
-is_paused <- function(x) changed(mf)$paused
+is_paused <- function(mf) changed(mf)$paused

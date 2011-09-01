@@ -17,7 +17,7 @@
 ##' please inform the authors.
 ##'
 ##' @title mutalist
-##' @param ... elements to include in the list
+##' @param ... elements to include in the list or arguments passed to methods
 ##' @return a new mutalist
 ##' @author Michael Lawrence
 ##' @rdname mutalist
@@ -52,15 +52,17 @@ mutalist <- function(...) {
 
 ##' @rdname mutalist
 ##' @param x a mutalist
-##' @S3method length mutalist
+##' @method length mutalist
+##' @export
 length.mutalist <- function(x) {
   length(.envNames(x))
 }
 
 ##' @rdname mutalist
-##' @param ... arguments passed to methods
 ##' @param value replacement value
-##' @S3method names<- mutalist
+##' @method names<- mutalist
+##' @export
+##' @usage \method{names}{mutalist}(x, ...) <- value
 `names<-.mutalist` <- function(x, ..., value) {
   if (!is.null(value)) {
     value <- as.character(value)
@@ -74,7 +76,8 @@ length.mutalist <- function(x) {
 }
 
 ##' @rdname mutalist
-##' @S3method names mutalist
+##' @method names mutalist
+##' @export
 names.mutalist <- function(x) .userNames(x)
 
 ## internal name accessors
@@ -99,6 +102,7 @@ names.mutalist <- function(x) .userNames(x)
 ##' @param i element indices
 ##' @param j unused
 ##' @S3method [[ mutalist
+##' @usage \method{[[}{mutalist}(x, i, j, ...)
 `[[.mutalist` <- function(x, i, j, ...) {
   dotArgs <- list(...)
   if (length(dotArgs) > 0)
@@ -133,6 +137,7 @@ names.mutalist <- function(x) .userNames(x)
 
 ##' @rdname mutalist
 ##' @S3method [[<- mutalist
+##' @usage \method{[[}{mutalist}(x, i, j, ...) <- value
 `[[<-.mutalist` <- function(x, i, j, ..., value) {
   if (!missing(j) || length(list(...)) > 0)
     stop("invalid replacement")
@@ -169,7 +174,10 @@ names.mutalist <- function(x) .userNames(x)
 
 ##' @rdname mutalist
 ##' @param name element name
-##' @S3method $<- mutalist
+##' @method $<- mutalist
+##' @export
+##' @usage \method{$}{mutalist}(x, name) <- value
+##' @aliases $.mutalist
 `$<-.mutalist` <- function(x, name, value) {
   x[[name]] <- value
   x
@@ -178,6 +186,7 @@ names.mutalist <- function(x) .userNames(x)
 ##' @rdname mutalist
 ##' @param drop unused
 ##' @S3method [ mutalist
+##' @usage \method{[}{mutalist}(x, i, j, ..., drop)
 `[.mutalist` <- function(x, i, j, ..., drop) {
 ### Supported 'i' types: numeric, character, logical, NULL and missing.
   if (!missing(j) || length(list(...)) > 0)
@@ -198,6 +207,7 @@ names.mutalist <- function(x) .userNames(x)
 
 ##' @rdname mutalist
 ##' @S3method [<- mutalist
+##' @usage \method{[}{mutalist}(x, i, j, ...) <- value
 `[<-.mutalist` <- function(x, i, j, ..., value) {
   if (!missing(j) || length(list(...)) > 0)
     stop("invalid replacement")
@@ -217,7 +227,8 @@ names.mutalist <- function(x) .userNames(x)
 
 ##' @rdname mutalist
 ##' @param n number of elements in subset
-##' @S3method head mutalist
+##' @method head mutalist
+##' @export
 head.mutalist <- function(x, n = 6L, ...) {
   stopifnot(length(n) == 1L)
   if (n < 0L)
@@ -228,7 +239,8 @@ head.mutalist <- function(x, n = 6L, ...) {
 }
 
 ##' @rdname mutalist
-##' @S3method tail mutalist
+##' @method tail mutalist
+##' @export
 tail.mutalist <- function(x, n = 6L, ...) {
   stopifnot(length(n) == 1L)
   xlen <- length(x)
@@ -245,7 +257,8 @@ tail.mutalist <- function(x, n = 6L, ...) {
 
 ##' @rdname mutalist
 ##' @param recursive whether to perform recursively
-##' @S3method c mutalist
+##' @method c mutalist
+##' @export
 c.mutalist <- function(x, ..., recursive = FALSE) {
   do.call(mutalist, do.call(c, lapply(list(x, ...), as.list)))
 }
@@ -259,7 +272,8 @@ c.mutalist <- function(x, ..., recursive = FALSE) {
 ##' @rdname mutalist
 ##' @param X a mutalist
 ##' @param FUN a function to apply over the elements
-##' @S3method lapply mutalist
+##' @method lapply mutalist
+##' @export
 lapply.mutalist <- function(X, FUN, ...)
   lapply(as.list(X), FUN = FUN, ...)
 
@@ -270,7 +284,8 @@ lapply.mutalist <- function(X, FUN, ...)
 ###
 
 ##' @rdname mutalist
-##' @S3method as.list mutalist
+##' @method as.list mutalist
+##' @export
 as.list.mutalist <- function(x, ...) {
   l <- mget(.envNames(x), x) # does not duplicate like as.list.environment
   names(l) <- names(x)
@@ -278,13 +293,15 @@ as.list.mutalist <- function(x, ...) {
 }
 
 ##' @rdname mutalist
-##' @S3method as.data.frame mutalist
+##' @method as.data.frame mutalist
+##' @export
 as.data.frame.mutalist <- function(x, ...){
     as.data.frame(as.list(x))
 }
 
 ##' @rdname mutalist
-##' @S3method unlist mutalist
+##' @method unlist mutalist
+##' @export
 ##' @param use.names whether to preserve the names
 unlist.mutalist <- function(x, recursive = TRUE, use.names = TRUE) {
   unlist(as.list(x), recursive, use.names)
@@ -307,7 +324,8 @@ mutalist2env <- function(x, envir = new.env(hash, parent, size),
 ###
 
 ##' @rdname mutalist
-##' @S3method rev mutalist
+##' @method rev mutalist
+##' @export
 rev.mutalist <- function(x) {
   if (length(x) == 0)
     x
@@ -316,12 +334,14 @@ rev.mutalist <- function(x) {
 }
 
 ##' @rdname mutalist
-##' @S3method rep mutalist
+##' @method rep mutalist
+##' @export
 rep.mutalist <- function(x, ...)
   x[rep(seq_len(length(x)), ...)]
 
 ##' @rdname mutalist
-##' @S3method print mutalist
-print.mutalist <- function(x) {
+##' @method print mutalist
+##' @export
+print.mutalist <- function(x, ...) {
   print(as.list(x))
 }

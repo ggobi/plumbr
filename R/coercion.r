@@ -10,7 +10,8 @@
 as.mutaframe <- function(x, ...) UseMethod("as.mutaframe")
 
 ##' @rdname as.mutaframe
-##' @S3method as.mutaframe mutaframe
+##' @method as.mutaframe mutaframe
+##' @export
 as.mutaframe.mutaframe <- function(x, ...) {
   cl <- oldClass(x)
   i <- match("mutaframe", cl)
@@ -20,11 +21,13 @@ as.mutaframe.mutaframe <- function(x, ...) {
 }
 
 ##' @rdname as.mutaframe
-##' @S3method as.mutaframe data.frame
+##' @method as.mutaframe data.frame
+##' @export
 as.mutaframe.data.frame <- function(x, ...) .mutaframe(x, rownames(x))
 
 ##' @rdname as.mutaframe
-##' @S3method as.mutaframe default
+##' @method as.mutaframe default
+##' @export
 as.mutaframe.default <- function(x, ...) as.mutaframe(as.data.frame(x, ...))
 
 ##' Coerces a mutaframe to a \code{data.frame}
@@ -36,7 +39,8 @@ as.mutaframe.default <- function(x, ...) as.mutaframe(as.data.frame(x, ...))
 ##' @param optional see \code{\link{as.data.frame}}
 ##' @param ... see \code{\link{as.data.frame}}
 ##' @return a \code{data.frame}
-##' @S3method as.data.frame mutaframe
+##' @method as.data.frame mutaframe
+##' @export
 as.data.frame.mutaframe <- function(x, row.names = rownames(x),
                                     optional = FALSE, ...)
 {
@@ -62,7 +66,9 @@ is.mutaframe <- function(x) inherits(x, "mutaframe")
 ##'
 ##' @title Coercion to list
 ##' @param x a mutaframe
+##' @param ... ignored
 ##' @return a list, with one element for each mutaframe column
-##' @S3method as.list mutaframe
+##' @method as.list mutaframe
+##' @export
 as.list.mutaframe <- function(x, ...) lapply(x, do.call, list())
 ## as.list.environment does not resolve active bindings

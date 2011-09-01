@@ -1,4 +1,5 @@
 #' Proxy: filtering
+#' @noRd
 filter_proxy <- function(mf, i = NULL, j = NULL, rn) {
   if (is.null(i)) {
     varlist <- proxy_bindings(mf, j)
