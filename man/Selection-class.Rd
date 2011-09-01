@@ -78,7 +78,7 @@
   proxy down to \code{x}.
 
   The \code{linker} may be provided as an integer vector, like that
-  returned by \code{\link{match}}, but it is usually a function, as that
+  returned by \code{\link[base]{match}}, but it is usually a function, as that
   allows very general linking strategies. As an example, let us consider
   a simple linker between two datasets based on key matching. We assume
   that the keys, \code{source_keys} and \code{dest_keys}, are in the
