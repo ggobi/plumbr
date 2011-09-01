@@ -11,7 +11,7 @@ as.mutaframe <- function(x, ...) UseMethod("as.mutaframe")
 
 ##' @rdname as.mutaframe
 ##' @S3method as.mutaframe mutaframe
-as.mutaframe.mutaframe <- function(x) {
+as.mutaframe.mutaframe <- function(x, ...) {
   cl <- oldClass(x)
   i <- match("mutaframe", cl)
   if (i > 1L) 
@@ -21,7 +21,7 @@ as.mutaframe.mutaframe <- function(x) {
 
 ##' @rdname as.mutaframe
 ##' @S3method as.mutaframe data.frame
-as.mutaframe.data.frame <- function(x) .mutaframe(x, rownames(x))
+as.mutaframe.data.frame <- function(x, ...) .mutaframe(x, rownames(x))
 
 ##' @rdname as.mutaframe
 ##' @S3method as.mutaframe default
@@ -64,5 +64,5 @@ is.mutaframe <- function(x) inherits(x, "mutaframe")
 ##' @param x a mutaframe
 ##' @return a list, with one element for each mutaframe column
 ##' @S3method as.list mutaframe
-as.list.mutaframe <- function(x) lapply(x, do.call, list())
+as.list.mutaframe <- function(x, ...) lapply(x, do.call, list())
 ## as.list.environment does not resolve active bindings
