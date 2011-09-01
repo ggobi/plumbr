@@ -33,3 +33,4 @@ Collate:
     'selection.r'
     'utils.r'
     's4.r'
+    'import.r'
