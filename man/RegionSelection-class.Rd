@@ -4,12 +4,17 @@
 \alias{class:RegionSelection}
 \alias{RegionSelection-class}
 
-\alias{ItemSelection}
+\alias{RegionSelection}
 
 %% coercion methods
 \alias{as.matrix,RegionSelection-method}
 \alias{coerce,RegionSelection,matrix-method}
 
+\title{
+  The \code{ItemSelection} class implements
+  \code{\linkS4class{Selection}} for the selection of 1D and 2D regions
+  in plot/data space.
+}
 \description{
   The \code{ItemSelection} class implements
   \code{\linkS4class{Selection}} for the selection of 1D and 2D regions

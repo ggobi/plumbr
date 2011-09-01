@@ -19,6 +19,11 @@
 \alias{as.factor,ItemSelection-method}
 \alias{which,ItemSelection-method}
 
+\title{
+  The \code{ItemSelection} class implements
+  \code{\linkS4class{Selection}} for the very common case of selecting
+  items in a dataset, optionally with weights.
+}
 \description{
   The \code{ItemSelection} class implements
   \code{\linkS4class{Selection}} for the very common case of selecting
