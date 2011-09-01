@@ -1,6 +1,6 @@
 ## imports
 importFrom(utils, head, tail)
-importFrom(objectSignals, signalingField, Signal)
+importFrom(objectSignals, signalingField, Signal, declareSignal)
 importClassesFrom(objectSignals, Signal)
 
 ## mutaframe data.frame style accessors
