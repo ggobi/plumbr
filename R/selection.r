@@ -43,15 +43,17 @@ selection_binding <- function(val) {
   } else {
     if (is.function(.selection))
       .selection(val)
-    else .selection <<- val
-    changed$emit()
+    else {
+      .selection <<- val
+      changed$emit()
+    }
   }
 }
 
 Selection.gen <- setRefClass("Selection",
                              fields = c(
                                .selection = "ANY",
-                               changed = "Signal",
+                               declareSignal(changed()),
                                selection = selection_binding
                                ))
 
