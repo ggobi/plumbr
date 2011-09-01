@@ -1,25 +1,5 @@
 ### Linking Routines ###
 
-if (FALSE) { # please ignore my bad programming habits
-  ## Example:
-  ## Assume we have a dataset:
-  data(Cars93, package="MASS")
-  mf <- mutaframe(Cars93)
-  mf$.color <- "gray"
-  ## First step is to create a base selection
-  sel <- ItemSelection()
-  ## Now, link that selection to other cases in same dataset by some variable
-  linked_sel <- sel$link(match_any_linker(Cars93["Manufacturer"]))
-  ## Finally, scale that linked selection to the data
-  linked_sel$scale(function(x, d) {
-    d[as.logical(x), ".color"] <- "red"
-  }, mf)
-  ## To test, select some cases
-  cases <- rep(FALSE, nrow(mf))
-  cases[seq(1, 10, 2)] <- TRUE
-  sel$replace(cases)
-}
-
 ##' A utility for creating linking functions that operate in both
 ##' directions (full duplex).
 ##'
@@ -62,8 +42,9 @@ generate_key <- function(data) {
 ##' in every column of \code{from_data} and \code{to_data}. Thus,
 ##' \code{from_data} and \code{to_data} should contain only the
 ##' columns necessary for key generation. They should not be an
-##' entire dataset.
-##'
+##' entire dataset. 
+##' 
+##' @title match_any_linker
 ##' @param from_data A \code{data.frame}-like object containing the
 ##' keys for linking the corresponding rows to rows in \code{to_data}
 ##' @param to_data A \code{data.frame}-like object containing the keys
