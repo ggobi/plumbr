@@ -6,6 +6,19 @@
 
 \alias{ItemSelection}
 
+%% coercion methods
+\alias{coerce,ItemSelection,vector-method}
+\alias{as.vector,ItemSelection-method}
+\alias{coerce,ItemSelection,integer-method}
+\alias{as.integer,ItemSelection-method}
+\alias{coerce,ItemSelection,numeric-method}
+\alias{as.numeric,ItemSelection-method}
+\alias{coerce,ItemSelection,logical-method}
+\alias{as.logical,ItemSelection-method}
+\alias{coerce,ItemSelection,factor-method}
+\alias{as.factor,ItemSelection-method}
+\alias{which,ItemSelection-method}
+
 \description{
   The \code{ItemSelection} class implements
   \code{\linkS4class{Selection}} for the very common case of selecting

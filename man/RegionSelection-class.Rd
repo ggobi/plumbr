@@ -6,6 +6,10 @@
 
 \alias{ItemSelection}
 
+%% coercion methods
+\alias{as.matrix,RegionSelection-method}
+\alias{coerce,RegionSelection,matrix-method}
+
 \description{
   The \code{ItemSelection} class implements
   \code{\linkS4class{Selection}} for the selection of 1D and 2D regions
