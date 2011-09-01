@@ -74,9 +74,10 @@ Selection.gen$methods(link = function(linker) {
     delegate <- function(val) {
       if (missing(val))
         linker(.self)
-      else linker(.self, val)
+      else .self$replace(linker(.self, val))
     }
     proxy <- ItemSelection(delegate)
+### FIXME: should probably see if the linked selection has really changed first
     changed$connect(proxy$changed$emit)
     proxy
   } else stop("'linker' must be either a function or an integer matching")
