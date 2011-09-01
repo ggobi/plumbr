@@ -101,6 +101,7 @@ RegionSelection.gen <- setRefClass("RegionSelection", contains = "Selection")
 ##' return the selection. Otherwise, the argument is the new
 ##' selection status, and the function should store it. This is the
 ##' same semantic as \link[=makeActiveBinding]{active bindings}.
+##' @noRd
 ItemSelection <- function(delegate = NULL) {
   ItemSelection.gen$new(.selection = delegate, changed = Signal())
 }

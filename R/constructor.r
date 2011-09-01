@@ -85,6 +85,7 @@ mutaframe <- function(..., row.names = NULL) {
 
 ##' Raw constructor.
 ##' Constructs a mutaframe from a list of variables/bindings.
+##' @noRd
 .mutaframe <- function(varlist = list(), row.names = NULL) {
   mf <- new.env(parent = emptyenv())
   

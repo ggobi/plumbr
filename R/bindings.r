@@ -22,6 +22,7 @@ proxy_bindings <- function(mf, j = names(mf)) {
 
 #' @param i rows to filter
 #' @return named list of binding functions
+#' @noRd
 filter_bindings <- function(mf, j = names(mf), i) {
   binder <- function(sym) {
     function(v) {
