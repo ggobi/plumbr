@@ -3,11 +3,14 @@ Version: 0.6.3
 Title: Mutable and dynamic data models
 Author: Michael Lawrence, Hadley Wickham
 Depends:
-    R (>= 2.10.0),
-    utils
+    R (>= 2.10.0)
 Imports:
     utils,
+    methods,
     objectSignals
+Suggests:
+    plyr,
+    testthat
 URL: http://plumbr.r-forge.r-project.org
 Maintainer: Michael Lawrence <michafla@gene.com>
 Description: The base R data.frame, like any vector, is
