@@ -4,6 +4,7 @@
 ##' @param row.names optional, the character vector of row names
 ##' @return a mutaframe
 ##' @exportClass mutaframe
+##' @aliases mutaframe-class
 mutaframe <- function(..., row.names = NULL) {
   listData <- list(...)
 

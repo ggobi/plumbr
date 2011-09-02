@@ -21,6 +21,7 @@
 ##' @return a new mutalist
 ##' @author Michael Lawrence
 ##' @rdname mutalist
+##' @aliases mutalist-class
 ##' @export
 ##' @exportClass mutalist
 mutalist <- function(...) {

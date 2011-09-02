@@ -13,6 +13,7 @@
 \alias{$<-.mutalist}
 \alias{$.mutalist}
 \alias{mutalist2env}
+\alias{mutalist-class}
 \alias{names<-.mutalist}
 \alias{names.mutalist}
 \alias{print.mutalist}

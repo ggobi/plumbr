@@ -1,5 +1,6 @@
 \name{mutaframe}
 \alias{mutaframe}
+\alias{mutaframe-class}
 \title{Create a mutaframe, a mutable data.frame}
 \usage{
   mutaframe(..., row.names = NULL)
