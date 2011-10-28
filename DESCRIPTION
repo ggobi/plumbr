@@ -7,7 +7,7 @@ Depends:
 Imports:
     utils,
     methods,
-    objectSignals
+    objectSignals (>= 0.10.2)
 Suggests:
     plyr,
     testthat
