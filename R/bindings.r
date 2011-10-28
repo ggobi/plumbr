@@ -70,7 +70,7 @@ raw_binding <- function(mf, name, data) {
 ##' @param data list of values
 ##' @return named list of binding functions
 raw_bindings <- function(mf, data) {
-  if (is.null(names(data)))
+  if (length(data) && is.null(names(data)))
     stop("'data' must have names")
   mapply(raw_binding, names(data), data, MoreArgs = list(mf = mf))
 }
