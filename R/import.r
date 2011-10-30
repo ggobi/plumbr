@@ -1,4 +1,4 @@
 ##' @importFrom utils head tail
-##' @importFrom objectSignals signalingField Signal declareSignal
+##' @importFrom objectSignals Signal declareSignal
 ##' @importClassesFrom objectSignals Signal
 NULL
