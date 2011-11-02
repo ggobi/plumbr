@@ -1,5 +1,5 @@
 Package: plumbr
-Version: 0.6.3
+Version: 0.6.5
 Title: Mutable and dynamic data models
 Author: Michael Lawrence, Hadley Wickham
 Depends:
