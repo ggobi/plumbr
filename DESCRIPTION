@@ -10,7 +10,8 @@ Imports:
     objectSignals (>= 0.10.2)
 Suggests:
     plyr,
-    testthat
+    testthat,
+    MASS
 URL: https://github.com/ggobi/plumbr/wiki
 Maintainer: Michael Lawrence <michafla@gene.com>
 Description: The base R data.frame, like any vector, is
