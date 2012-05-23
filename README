@@ -21,11 +21,11 @@ Summary: summary
 Duplicates: duplicated, anyDuplicated
 Display: print
 
-The methods that would return another frame could return a proxy,
-or a rooted frame. The methods [, c/rbind, subsetting, aggregate,
-and split fall into this category. Particularly with subsetting
-methods, one may want to delete the original frame, rather than
-proxy it. Passing 'drop = TRUE' to [, for example, could root the
+The methods that would return another frame could return a proxy, or a
+rooted frame. The methods [, c/rbind, subset, head, tail, transform,
+aggregate, and split fall into this category. Particularly with
+subsetting methods, one may want to delete the original frame, rather
+than proxy it. Passing 'drop = TRUE' to [, for example, could root the
 frame. We can add the 'drop' argument on to our other methods, like
 subset.data.frame does. There can be a function could be used to
 explictly root a proxy.
