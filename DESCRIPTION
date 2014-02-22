@@ -1,5 +1,5 @@
 Package: plumbr
-Version: 0.6.6
+Version: 0.6.9
 Title: Mutable and dynamic data models
 Author: Michael Lawrence, Hadley Wickham
 Depends:
@@ -40,3 +40,4 @@ Collate:
     'utils.r'
     's4.r'
     'import.r'
+    'globals.r'
