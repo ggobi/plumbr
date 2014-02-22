@@ -1,11 +1,2 @@
-
-/NAMESPACE~
-/R/linking.r~
-/R/selection.r~
-/R/signal.r~
-/inst/tests/.Rhistory
-/R/.Rhistory
-/R/s4.r~
-/man/ItemSelection-class.Rd~
-/man/RegionSelection-class.Rd~
-/man/Selection-class.Rd~
+.Rhistory
+*~
