@@ -44,7 +44,7 @@ selection_binding <- function(val) {
     if (is.function(.selection))
       .selection(val)
     else {
-      .selection <<- val
+      .self$.selection <- val
       changed$emit()
     }
   }
